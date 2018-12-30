@@ -4,7 +4,7 @@ this is my first project by node.js which I learn it fast from somme great websi
 
 All Ways to see the project: 
 
-after repository follow below code
+after repository follow below codes
 
       npm i
       
