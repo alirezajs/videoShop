@@ -1,6 +1,6 @@
 # OnLIineShop
 
-this is my first project by node.js which I learn it fast from somme great website to learn node.js
+this is my first project by node.js which I learnt fastly from some great website to learn node.js
 
 All Ways to see the project: 
 
