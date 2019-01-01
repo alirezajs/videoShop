@@ -1,27 +1,29 @@
 {
-  "name": "onlineshop",
+  "name": "nodejs-cms",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js"
   },
-  "author": "https://github.com/alirezajs",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "app-module-path": "^2.2.0",
+    "auto-bind": "^1.2.0",
+    "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
-    "connect-mongo": "^2.0.3",
+    "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "ejs": "^2.5.9",
+    "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "express-validator": "^5.3.1",
-    "mongoose": "^5.4.1",
+    "express-validator": "^5.1.2",
+    "mongoose": "^5.0.16",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.17.3"
   }
 }
