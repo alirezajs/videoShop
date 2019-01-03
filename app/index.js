@@ -33,6 +33,8 @@ module.exports = class Application {
      * Express Config
      */
     setConfig() {
+        require('app/passport/passport-local');
+
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views' , path.resolve('./resource/views'));
@@ -48,6 +50,8 @@ module.exports = class Application {
         }));
         app.use(cookieParser('mysecretkey'));
         app.use(flash());
+        app.use(passport.initialize());
+        app.use(passport.session());
     }
 
     setRouters() {
