@@ -10,13 +10,18 @@ const registerController = require('app/http/controllers/auth/registerController
 // Middlewares
 const redirectIfAuthenticated = require('app/http/middleware/redirectIfAuthenticated');
 
+// validators 
+const registerValidator = require('app/http/validators/registerValidator');
+const loginValidator = require('app/http/validators/loginValidator');
+
+
 // Home Routes
 router.get('/' , homeController.index);
 router.get('/login' , redirectIfAuthenticated.handle , loginController.showLoginForm);
-router.post('/login' , redirectIfAuthenticated.handle , loginController.loginProccess);
+router.post('/login' , redirectIfAuthenticated.handle , loginValidator.handle() ,loginController.loginProccess);
 
 router.get('/register' , redirectIfAuthenticated.handle , registerController.showRegsitrationForm);
-router.post('/register' , redirectIfAuthenticated.handle , registerController.registerProccess);
+router.post('/register' , redirectIfAuthenticated.handle , registerValidator.handle() , registerController.registerProccess);
 
 router.get('/logout' , (req ,res) => {
     req.logout();
