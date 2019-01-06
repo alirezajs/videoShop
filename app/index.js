@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const validator = require('express-validator');
@@ -22,8 +21,7 @@ module.exports = class Application {
 
     setupExpress() {
         const server = http.createServer(app);
-
-        server.listen(config.port, () => console.log(`Listening on http://localhost:${config.port}`));
+        server.listen(config.port , () => console.log(`Listening on port ${config.port}`));
     }
 
     setMongoConnection() {
@@ -36,26 +34,22 @@ module.exports = class Application {
      */
     setConfig() {
         require('app/passport/passport-local');
-
-        app.use(express.static('public'));
-        app.set('view engine', 'ejs');
-        app.set('views', path.resolve('./resource/views'));
+ 
+        app.use(express.static(config.layout.public_dir));
+        app.set('view engine', config.layout.view_engine);
+        app.set('views' , config.layout.view_dir);
 
         app.use(bodyParser.json());
-
-        app.use(bodyParser.urlencoded({
-            extended: true
-        }));
+        app.use(bodyParser.urlencoded({ extended : true }));
         app.use(validator());
-        app.use(session({
-            ...config.session
-        }));
-        app.use(cookieParser('mysecretkey'));
+        app.use(session({...config.session}));
+        app.use(cookieParser(config.cookie_secretkey));
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(rememberLogin.handle);
-        app.use((req, res, next) => {
+
+        app.use((req , res , next) => {
             app.locals = new Helpers(req, res).getObjects();
             next();
         });
@@ -63,6 +57,6 @@ module.exports = class Application {
 
     setRouters() {
         app.use(require('app/routes/api'));
-        app.use(require('app/routes/web'));
+        app.use(require('app/routes/web'));        
     }
 }
