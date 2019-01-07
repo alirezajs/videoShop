@@ -21,7 +21,7 @@ module.exports = class Application {
 
     setupExpress() {
         const server = http.createServer(app);
-        server.listen(config.port , () => console.log(`Listening on port ${config.port}`));
+        server.listen(config.port, () => console.log(`Listening on port ${config.port}`));
     }
 
     setMongoConnection() {
@@ -34,22 +34,28 @@ module.exports = class Application {
      */
     setConfig() {
         require('app/passport/passport-local');
- 
+
         app.use(express.static(config.layout.public_dir));
         app.set('view engine', config.layout.view_engine);
-        app.set('views' , config.layout.view_dir);
+        app.set('views', config.layout.view_dir);
+        app.use(config.layout.ejs.expressLayouts);
+        app.set("layout extractScripts", config.layout.ejs.extractScripts);
+        app.set("layout extractStyles", config.layout.ejs.extractScripts);
+
+        app.set("layout", config.layout.ejs.master);
+
 
         app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({ extended : true }));
+        app.use(bodyParser.urlencoded({ extended: true }));
         app.use(validator());
-        app.use(session({...config.session}));
+        app.use(session({ ...config.session }));
         app.use(cookieParser(config.cookie_secretkey));
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(rememberLogin.handle);
 
-        app.use((req , res , next) => {
+        app.use((req, res, next) => {
             app.locals = new Helpers(req, res).getObjects();
             next();
         });
@@ -57,6 +63,6 @@ module.exports = class Application {
 
     setRouters() {
         app.use(require('app/routes/api'));
-        app.use(require('app/routes/web'));        
+        app.use(require('app/routes/web'));
     }
 }
