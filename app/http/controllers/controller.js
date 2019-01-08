@@ -21,7 +21,7 @@ module.exports = class controller {
             this.recaptcha.verify(req , (err , data) => {
                 if(err) {
                     req.flash('errors' , 'گزینه امنیتی مربوط به شناسایی روبات خاموش است، لطفا از فعال بودن آن اطمینان حاصل نمایید و مجدد امتحان کنید');
-                    res.redirect(req.url);
+                    res.redirect(req.originalUrl);
                 } else resolve(true);
             })
         })

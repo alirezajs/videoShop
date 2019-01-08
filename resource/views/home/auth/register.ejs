@@ -4,7 +4,7 @@
             <div class="card card-default">
                 <div class="card-header"><h5>عضویت در سایت</h5></div>
                 <div class="card-body">
-                    <form class="form-horizontal" method="POST" action="/register" novalidate>
+                    <form class="form-horizontal" method="POST" action="/auth/register" novalidate>
 
                         <%- include('./../layouts/error-messages') -%>
 
@@ -31,7 +31,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">عضویت</button>
-                            <!-- <a href="/login/google" class="btn btn-danger">ورود با اکانت گوگل</a> -->
+                            <a href="/auth/google" class="btn btn-danger">ورود با اکانت گوگل</a>
                         </div>
                     </form>
                 </div>

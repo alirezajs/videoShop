@@ -17,14 +17,14 @@ class loginController extends controller {
             .then(result => this.validationData(req))
             .then(result => {
                 if (result) this.login(req, res, next)
-                else res.redirect('/login');
+                else res.redirect('/auth/login');
             })
             .catch(err => console.log(err));
     }
 
     login(req, res, next) {
         passport.authenticate('local.login', (err, user) => {
-            if (!user) return res.redirect('/login');
+            if (!user) return res.redirect('/auth/login');
 
             req.logIn(user, err => {
                 if (req.body.remember) {
