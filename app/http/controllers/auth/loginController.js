@@ -12,14 +12,15 @@ class loginController extends controller {
         });
     }
 
-    loginProccess(req, res, next) {
-        this.recaptchaValidation(req, res)
-            .then(result => this.validationData(req))
-            .then(result => {
-                if (result) this.login(req, res, next)
-                else res.redirect('/auth/login');
-            })
-            .catch(err => console.log(err));
+    async loginProccess(req, res, next) {
+
+        await this.recaptchaValidation(req, res);
+        let result = await this.validationData(req)
+        if (result) {
+            return this.login(req, res, next)
+        }
+
+        return res.redirect('/auth/login');
     }
 
     login(req, res, next) {

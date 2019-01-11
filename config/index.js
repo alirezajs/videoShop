@@ -2,6 +2,7 @@ const database = require('./database');
 const session = require('./session');
 const layout = require('./layout');
 const service = require('./service');
+const project = require('./project');
 
 module.exports = {
     database,
@@ -9,5 +10,6 @@ module.exports = {
     layout,
     service,
     port : process.env.APPLICATION_PORT,
-    cookie_sercretkey : process.env.COOKIE_SECRETKEY
+    cookie_sercretkey : process.env.COOKIE_SECRETKEY,
+    project
 }
