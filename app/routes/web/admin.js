@@ -6,7 +6,7 @@ const adminController = require('app/http/controllers/admin/adminController');
 const courseController = require('app/http/controllers/admin/courseController');
 
 router.use((req, res, next) => {
-    res.locals.layout = "admin/master"
+    res.locals.layout = "admin/master";
     next();
 })
 

@@ -12,6 +12,7 @@ const redirectIfNotAdmin = require('app/http/middleware/redirectIfNotAdmin');
 const adminRouter = require('app/routes/web/admin');
 router.use('/admin', redirectIfNotAdmin.handle, adminRouter);
 
+
 // Home Router
 const homeRouter = require('app/routes/web/home');
 router.use('/', homeRouter);
