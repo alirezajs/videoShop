@@ -7,7 +7,7 @@
             <div class="card-body">
                 <form class="form-horizontal" role="form" method="POST" action="/auth/password/reset" novalidate>
 
-                    <%- include('./../../layouts/error-messages') -%>
+                    <%- include(viewPath('layouts/error-messages')) -%>
 
                     <input type="hidden" value="<%= token %>" name="token">
 
