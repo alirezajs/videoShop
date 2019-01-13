@@ -10,6 +10,15 @@ class courseController extends controller {
         res.render('admin/courses/create');
     }
 
-}
+    async store(req, res) {
+        let result = this.validationData(req);
+        if (!result) 
+            this.back(req, res);
+        }
+
+        //images
+        //create course
+
+    }
 
 module.exports = new courseController();

@@ -14,5 +14,5 @@ router.use((req, res, next) => {
 router.get('/', adminController.index);
 router.get('/courses' , courseController.index);
 router.get('/courses/create' , courseController.create);
-
+router.post('/courses/create' , courseController.store);
 module.exports = router;

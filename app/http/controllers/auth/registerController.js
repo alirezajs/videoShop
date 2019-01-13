@@ -19,9 +19,7 @@ class registerController extends controller {
         if (result) {
             return this.register(req, res, next)
         }
-        req.flash('formData', req.body);
-
-        return res.redirect('/auth/register');
+        this.back(req, res)
     }
 
     register(req, res, next) {

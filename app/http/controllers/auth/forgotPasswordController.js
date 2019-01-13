@@ -23,9 +23,7 @@ class forgotPasswordController extends controller {
         if (result) {
             return this.sendResetLink(req, res)
         }
-        req.flash('formData' , req.body);
-
-        return res.redirect('/auth/password/reset');
+        this.back(req, res);
 
     }
 
