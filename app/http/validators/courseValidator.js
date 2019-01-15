@@ -1,28 +1,35 @@
 const validator = require('./validator');
 const { check } = require('express-validator/check');
 const Course = require('app/models/course');
-
+const path = require('path');
 class courseValidator extends validator {
-    
+
     handle() {
         return [
             check('title')
-                .isLength({ min : 5 })
+                .isLength({ min: 5 })
                 .withMessage('عنوان نمیتواند کمتر از 5 کاراکتر باشد')
                 .custom(async (value) => {
-                    let course = await Course.findOne({ slug : this.slug(value) });
-                    if(course) {
+                    let course = await Course.findOne({ slug: this.slug(value) });
+                    if (course) {
                         throw new Error('چنین دوره ای با این عنوان قبلا در سایت قرار داد شده است')
                     }
                 }),
-            
 
+            check('images')
+                .custom(async (value) => {
+                    if (!value)
+                        throw new Error('وارد کردن تصویر الزامی است');
+                    let fileExt = ['.png', '.jpg', 'jpeg', '.svg'];
+                    if (!fileExt.includes(path.extname(value)))
+                        throw new Error('پسوند فایل وارد شده از پسوند های تصاویر نیست')
+                }),
             check('type')
                 .not().isEmpty()
                 .withMessage('فیلد نوع دوره نمیتواند خالی بماند'),
 
             check('body')
-                .isLength({ min : 20 })
+                .isLength({ min: 20 })
                 .withMessage('متن دوره نمیتواند کمتر از 20 کاراکتر باشد'),
 
             check('price')
@@ -35,9 +42,9 @@ class courseValidator extends validator {
         ]
     }
 
-    
+
     slug(title) {
-        return title.replace(/([^۰-۹آ-یa-z0-9]|-)+/g , "-")
+        return title.replace(/([^۰-۹آ-یa-z0-9]|-)+/g, "-")
     }
 }
 

@@ -21,7 +21,7 @@ module.exports = class Application {
 
     setupExpress() {
         const server = http.createServer(app);
-        server.listen(config.port, () => console.log(`Listening on port ${config.port}`));
+        server.listen(config.port, () => console.log(`http://localhost:${config.port}`));
     }
 
     setMongoConnection() {

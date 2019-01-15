@@ -24,14 +24,14 @@ module.exports = class Helpers {
 
     getGlobalVaribales() {
         return {
-            errors : this.req.flash('errors')
+            errors: this.req.flash('errors')
         }
     }
 
-    old(field , defaultValue = '') {
+    old(field, defaultValue = '') {
         return this.formData && this.formData.hasOwnProperty(field) ? this.formData[field] : defaultValue;
     }
-    
+
     auth() {
         return {
             check: this.req.isAuthenticated(),
