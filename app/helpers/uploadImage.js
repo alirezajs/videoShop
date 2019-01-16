@@ -27,7 +27,7 @@ const ImageStorage = multer.diskStorage({
 
           }
           else {
-               console.log(file)
+               
                cb(null, Date.now() + "-" + file.originalname);
 
           }
