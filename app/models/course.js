@@ -15,5 +15,18 @@ const CourseSchema = Schema({
     commentCount: { type: String, default: 0 },
 }, { timestamps: true });
 
+CourseSchema.methods.typeToPersian = function() {
+    switch (this.type) {
+        case 'cash':
+                return 'نقدی'
+            break;
+        case 'vip':
+            return 'اعضای ویژه'
+        break;    
+        default:
+            return 'رایگان'    
+            break;
+    }
+}
 
 module.exports = mongoose.model('Course', CourseSchema);

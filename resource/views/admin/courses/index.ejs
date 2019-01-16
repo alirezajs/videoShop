@@ -12,20 +12,27 @@
                 <th>عنوان مقاله</th>
                 <th>تعداد نظرات</th>
                 <th>مقدار بازدید</th>
-                <th>تعد شرکت کننده ها</th>
                 <th>وضعیت دوره</th>
                 <th>تنظیمات</th>
             </tr>
         </thead>
+
         <tbody>
+            <% courses.forEach(course=>{ %>
             <tr>
-                <td><a href="/courses/آپدیت-جدید-راکت">آموزش پروژه محور bootstrap 4</a></td>
-                <td>0</td>
-                <td>0</td>
-                <td>آموزش پروژه محور bootstrap 4</td>
+                <td><a href="/courses/آپدیت-جدید-راکت">
+                        <%=course.title %>
+                    </a></td>
                 <td>
-                    نقدی
+                    <%=course.commentCount %>
                 </td>
+                <td>
+                    <%=course.viewCount %>
+                </td>
+                <td>
+                   <%= course.typeToPersian() %>
+                </td>
+
                 <td>
                     <form action="http://localhost:8000/admin/courses/2" method="post">
                         <input type="hidden" name="_method" value="delete">
@@ -37,6 +44,7 @@
                     </form>
                 </td>
             </tr>
+            <% }) %>
         </tbody>
     </table>
 

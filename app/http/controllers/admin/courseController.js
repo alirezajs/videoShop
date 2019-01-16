@@ -4,9 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-class indexController extends controller {
-    index(req, res) {
-        res.render('admin/courses/index', { title: 'دوره ها' });
+class courseController extends controller {
+    async index(req, res) {
+        let courses = await Course.find({}).sort({ createdAt: 1 });
+
+        res.render('admin/courses/index', { title: 'دوره ها', courses });
     }
 
     create(req, res) {
@@ -42,21 +44,21 @@ class indexController extends controller {
     }
     imageReasize(image) {
         const imageInfo = path.parse(image.path);
-        
+
         let addresImages = {};
         addresImages['original'] = this.getUrlImage(`${image.destination}/${image.filename}`);
 
         const resize = size => {
             let imageName = `${imageInfo.name}-${size}${imageInfo.ext}`;
-            
+
             addresImages[size] = this.getUrlImage(`${image.destination}/${imageName}`);
-            
+
             sharp(image.path)
-                .resize(size , null) 
+                .resize(size, null)
                 .toFile(`${image.destination}/${imageName}`);
         }
 
-        [1080 , 720 , 480].map(resize);
+        [1080, 720, 480].map(resize);
 
         return addresImages;
 
@@ -70,4 +72,4 @@ class indexController extends controller {
     }
 }
 
-module.exports = new indexController();
+module.exports = new courseController();
