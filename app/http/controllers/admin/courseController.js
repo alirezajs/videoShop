@@ -6,8 +6,8 @@ const sharp = require('sharp');
 
 class courseController extends controller {
     async index(req, res) {
-        let courses = await Course.find({}).sort({ createdAt: 1 });
-
+        let page = req.query.page || 1;
+        let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 }); //Course.find({}).sort({ createdAt: 1 });
         res.render('admin/courses/index', { title: 'دوره ها', courses });
     }
 

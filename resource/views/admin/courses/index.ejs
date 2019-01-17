@@ -18,7 +18,7 @@
         </thead>
 
         <tbody>
-            <% courses.forEach(course=>{ %>
+            <% courses.docs.forEach(course=>{ %>
             <tr>
                 <td><a href="/courses/آپدیت-جدید-راکت">
                         <%=course.title %>
@@ -48,26 +48,5 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center">
-        <ul class="pagination">
-
-
-
-
-
-            <li class="page-item active"><a class="page-link" href="#"><span>1</span></a></li>
-
-
-
-
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-
-
-
-
-            <li class="page-item"><a class="page-link" href="?page=2">&raquo;</a></li>
-
-        </ul>
-    </div>
-
+    <%- include(viewPath('layouts/pagination') ,{ pagination : courses}) %>
 </div>
