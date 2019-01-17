@@ -7,7 +7,7 @@ const sharp = require('sharp');
 class courseController extends controller {
     async index(req, res) {
         let page = req.query.page || 1;
-        let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 }); //Course.find({}).sort({ createdAt: 1 });
+        let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 });
         res.render('admin/courses/index', { title: 'دوره ها', courses });
     }
 
@@ -19,12 +19,12 @@ class courseController extends controller {
         let status = await this.validationData(req);
         if (!status) {
             if (req.file)
-                fs.unlink(req.file.path, (err) => { });
+                fs.unlinkSync(req.file.path);
             return this.back(req, res);
         }
 
         // create course
-        let images = this.imageReasize(req.file);
+        let images = this.imageResize(req.file);
         let { title, body, type, price, tags } = req.body;
 
         let newCourse = new Course({
@@ -34,7 +34,8 @@ class courseController extends controller {
             body,
             type,
             price,
-            images: JSON.stringify(images),
+            images,
+            thumb: images[480],
             tags
         });
 
@@ -42,7 +43,30 @@ class courseController extends controller {
 
         return res.redirect('/admin/courses');
     }
-    imageReasize(image) {
+
+    async destroy(req, res) {
+        let course = await Course.findById(req.params.id);
+        if (!course) {
+            return res.json('چنین دوره ای یافت نشد');
+        }
+        // delete episodes
+
+        // delete Images
+        Object.values(course.images).forEach(image => {
+            let imageUrl = `./public${image}`;
+            fs.unlinkSync(imageUrl,(err)=>{
+                
+            });
+
+        });
+
+        // // delete courses
+        course.remove();
+
+        return res.redirect('/admin/courses');
+    }
+
+    imageResize(image) {
         const imageInfo = path.parse(image.path);
 
         let addresImages = {};
@@ -61,8 +85,8 @@ class courseController extends controller {
         [1080, 720, 480].map(resize);
 
         return addresImages;
-
     }
+
     getUrlImage(dir) {
         return dir.substring(8);
     }

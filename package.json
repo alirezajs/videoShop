@@ -23,6 +23,7 @@
     "express-recaptcha": "^4.0.2",
     "express-session": "^1.15.6",
     "express-validator": "^5.1.2",
+    "method-override": "^3.0.0",
     "mkdirp": "^0.5.1",
     "mongoose": "^5.0.16",
     "mongoose-paginate": "^5.0.3",
