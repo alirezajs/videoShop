@@ -54,8 +54,8 @@ class courseController extends controller {
         // delete Images
         Object.values(course.images).forEach(image => {
             let imageUrl = `./public${image}`;
-            fs.unlinkSync(imageUrl,(err)=>{
-                
+            fs.unlinkSync(imageUrl, (err) => {
+
             });
 
         });
@@ -64,6 +64,43 @@ class courseController extends controller {
         course.remove();
 
         return res.redirect('/admin/courses');
+    }
+
+    async edit(req, res, next) {
+
+        let course = await Course.findById(req.params.id);
+        if (!course) {
+            return res.json("چنین دوره ای وجود ندارد")
+        }
+        return res.render('admin/courses/edit', { course });
+
+    }
+    async update(req, res, next) {
+        console.log("test")
+        let status = await this.validationData(req);
+        if (!status) {
+            return this.back(req, res);
+        }
+
+
+
+        let objForUpdate = {};
+
+        // set image thumb
+        objForUpdate.thumb = req.body.imagesThumb;
+
+         // check image 
+         if(req.file) {
+            objForUpdate.images = this.imageResize(req.file);
+            objForUpdate.thumb = objForUpdate.images[480];
+        }
+
+        delete req.body.images;
+        objForUpdate.slug = this.slug(req.body.title);
+        
+        await Course.findByIdAndUpdate(req.params.id , { $set : { ...req.body , ...objForUpdate }})
+        return res.redirect('/admin/courses');
+
     }
 
     imageResize(image) {
