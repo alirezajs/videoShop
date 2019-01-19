@@ -86,7 +86,7 @@ class courseController extends controller {
         try {
             let course = await Course.findById(req.params.id);
             if (!course) {
-                return res.json("چنین دوره ای وجود ندارد")
+                throw new Error("چنین دوره ای وجود ندارد")
             }
             return res.render('admin/courses/edit', { course });
 
@@ -96,6 +96,7 @@ class courseController extends controller {
         }
 
     }
+
     async update(req, res, next) {
         try {
             let status = await this.validationData(req);
