@@ -6,8 +6,11 @@ module.exports = new class errorHandler {
 
     async error404(req, res, next) {
         try {
-            res.statusCode = 404;
-            throw new Error('چنین صفحه ای یافت نشد');
+            let err = new Error('چنین صفحه ای یافت نشد');
+            err.statusCode = 404;
+
+            throw err;
+
         } catch (err) {
             next(err)
         }
