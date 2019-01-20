@@ -31,7 +31,8 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
-    "sharp": "^0.21.2"
+    "sharp": "^0.21.2",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.3"

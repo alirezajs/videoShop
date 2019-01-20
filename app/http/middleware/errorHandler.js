@@ -4,7 +4,7 @@ const middleware = require('./middleware');
 module.exports = new class errorHandler {
 
 
-    async error404(req, res, nextf) {
+    async error404(req, res, next) {
         try {
             res.statusCode = 404;
             throw new Error('چنین صفحه ای یافت نشد');
@@ -14,7 +14,7 @@ module.exports = new class errorHandler {
     }
 
     async handler(err, req, res, next) {
-        const statusCode = res.statusCode || 500;
+        const statusCode = err.statusCode || 500;
         const message = err.message || '';
         const stack = err.stack || '';
 

@@ -11,11 +11,9 @@ class courseController extends controller {
             let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 });
             res.render('admin/courses/index', { title: 'دوره ها', courses });
         } catch (err) {
-            res.statusCode = 500;
-            next(err)
+            next(err);
         }
     }
-
 
     create(req, res) {
         res.render('admin/courses/create');
@@ -50,61 +48,33 @@ class courseController extends controller {
 
             return res.redirect('/admin/courses');
         } catch (err) {
-            res.statusCode = 500;
-            next(err)
-        }
-    }
-
-    async destroy(req, res, next) {
-        try {
-            let course = await Course.findById(req.params.id);
-            if (!course) {
-                return res.json('چنین دوره ای یافت نشد');
-            }
-            // delete episodes
-
-            // delete Images
-            Object.values(course.images).forEach(image => {
-                let imageUrl = `./public${image}`;
-                fs.unlinkSync(imageUrl, (err) => {
-
-                });
-
-            });
-
-            // // delete courses
-            course.remove();
-
-            return res.redirect('/admin/courses');
-        } catch (err) {
-            res.statusCode = 500;
-            next(err)
+            next(err);
         }
     }
 
     async edit(req, res, next) {
+
         try {
+            this.isMongoId(req.params.id);
+
             let course = await Course.findById(req.params.id);
-            if (!course) {
-                throw new Error("چنین دوره ای وجود ندارد")
-            }
+            if (!course) this.error('چنین دوره ای وجود ندارد', 404);
+
+
             return res.render('admin/courses/edit', { course });
-
         } catch (err) {
-            res.statusCode = 500;
-            next(err)
+            next(err);
         }
-
     }
 
     async update(req, res, next) {
         try {
             let status = await this.validationData(req);
             if (!status) {
+                if (req.file)
+                    fs.unlinkSync(req.file.path);
                 return this.back(req, res);
             }
-
-
 
             let objForUpdate = {};
 
@@ -123,10 +93,29 @@ class courseController extends controller {
             await Course.findByIdAndUpdate(req.params.id, { $set: { ...req.body, ...objForUpdate } })
             return res.redirect('/admin/courses');
         } catch (err) {
-            res.statusCode = 500;
-            next(err)
+            next(err);
         }
+    }
 
+    async destroy(req, res, next) {
+        try {
+            this.isMongoId(req.params.id);
+
+            let course = await Course.findById(req.params.id);
+            if (!course) this.error('چنین دوره ای وجود ندارد', 404);
+
+            // delete episodes
+
+            // delete Images
+            Object.values(course.images).forEach(image => fs.unlinkSync(`./public${image}`));
+
+            // delete courses
+            course.remove();
+
+            return res.redirect('/admin/courses');
+        } catch (err) {
+            next(err);
+        }
     }
 
     imageResize(image) {
