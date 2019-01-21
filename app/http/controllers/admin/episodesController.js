@@ -30,11 +30,11 @@ class episodesController extends controller {
             }
 
 
-            let newCourse = new Episode({ ...req.body });
+            let newEpisode = new Episode({ ...req.body });
 
-            await newCourse.save();
+            await newEpisode.save();
 
-
+            this.updateCourseTime(newEpisode.course);
 
 
             return res.redirect('/admin/episodes');
@@ -71,7 +71,13 @@ class episodesController extends controller {
 
 
 
-            await Episode.findByIdAndUpdate(req.params.id, { $set: { ...req.body } })
+            await Episode.findByIdAndUpdate(req.params.id, { $set: { ...req.body } });
+
+            // prev course time update
+            this.updateCourseTime(Episode.course);
+            // now course time update
+            this.updateCourseTime(req.body.course);
+
             return res.redirect('/admin/episodes');
         } catch (err) {
             next(err);
@@ -85,9 +91,11 @@ class episodesController extends controller {
             let episode = await Episode.findById(req.params.id);
             if (!episode) this.error('چنین ویدئو ی ای وجود ندارد', 404);
 
-
+            let courseId = episode.course;
             // delete courses
             episode.remove();
+
+            this.updateCourseTime(courseId);
 
             return res.redirect('/admin/episodes');
         } catch (err) {
@@ -95,7 +103,17 @@ class episodesController extends controller {
         }
     }
 
+    async updateCourseTime(courseId) {
+        if (!courseId) {
+            console.log("کد درس وجود ندارد")
+            return;
+        }
 
+        let course = await Course.findById(courseId);
+        let episodes = await Episode.find({ course: courseId });
+        course.set({ time: this.getTime(episodes) });
+        await course.save();
+    }
 
 
 }
