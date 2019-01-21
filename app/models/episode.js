@@ -17,6 +17,18 @@ const EpisodeSchema = Schema({
 
 EpisodeSchema.plugin(mongoosePaginate);
 
-
+EpisodeSchema.methods.typeToPersian = function() {
+    switch (this.type) {
+        case 'cash':
+                return 'نقدی'
+            break;
+        case 'vip':
+            return 'اعضای ویژه'
+        break;    
+        default:
+            return 'رایگان'    
+            break;
+    }
+}
 
 module.exports = mongoose.model('Episode', EpisodeSchema);

@@ -17,36 +17,25 @@ class episodesController extends controller {
         }
     }
 
-    create(req, res) {
-        res.render('admin/episodes/create');
+    async create(req, res) {
+        let courses = await Course.find({});
+        res.render('admin/episodes/create', { courses });
     }
 
     async store(req, res, next) {
         try {
             let status = await this.validationData(req);
             if (!status) {
-                if (req.file)
-                    fs.unlinkSync(req.file.path);
                 return this.back(req, res);
             }
 
-            // create course
-            let images = this.imageResize(req.file);
-            let { title, body, type, price, tags } = req.body;
 
-            let newCourse = new Course({
-                user: req.user._id,
-                title,
-                slug: this.slug(title),
-                body,
-                type,
-                price,
-                images,
-                thumb: images[480],
-                tags
-            });
+            let newCourse = new Episode({ ...req.body });
 
             await newCourse.save();
+
+
+
 
             return res.redirect('/admin/episodes');
         } catch (err) {
@@ -59,11 +48,12 @@ class episodesController extends controller {
         try {
             this.isMongoId(req.params.id);
 
-            let course = await Course.findById(req.params.id);
-            if (!course) this.error('چنین دوره ای وجود ندارد', 404);
+            let episode = await Episode.findById(req.params.id);
+            if (!episode) this.error('چنین ویدیویی وجود ندارد', 404);
 
+            let courses = await Course.find({});
 
-            return res.render('admin/episodes/edit', { course });
+            return res.render('admin/episodes/edit', { episode, courses });
         } catch (err) {
             next(err);
         }
@@ -73,26 +63,15 @@ class episodesController extends controller {
         try {
             let status = await this.validationData(req);
             if (!status) {
-                if (req.file)
-                    fs.unlinkSync(req.file.path);
                 return this.back(req, res);
             }
 
             let objForUpdate = {};
 
-            // set image thumb
-            objForUpdate.thumb = req.body.imagesThumb;
 
-            // check image 
-            if (req.file) {
-                objForUpdate.images = this.imageResize(req.file);
-                objForUpdate.thumb = objForUpdate.images[480];
-            }
 
-            delete req.body.images;
-            objForUpdate.slug = this.slug(req.body.title);
 
-            await Course.findByIdAndUpdate(req.params.id, { $set: { ...req.body, ...objForUpdate } })
+            await Episode.findByIdAndUpdate(req.params.id, { $set: { ...req.body } })
             return res.redirect('/admin/episodes');
         } catch (err) {
             next(err);
@@ -103,16 +82,12 @@ class episodesController extends controller {
         try {
             this.isMongoId(req.params.id);
 
-            let course = await Course.findById(req.params.id);
-            if (!course) this.error('چنین دوره ای وجود ندارد', 404);
+            let episode = await Episode.findById(req.params.id);
+            if (!episode) this.error('چنین ویدئو ی ای وجود ندارد', 404);
 
-            // delete episodes
-
-            // delete Images
-            Object.values(course.images).forEach(image => fs.unlinkSync(`./public${image}`));
 
             // delete courses
-            course.remove();
+            episode.remove();
 
             return res.redirect('/admin/episodes');
         } catch (err) {
