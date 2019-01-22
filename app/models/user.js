@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     rememberToken: { type: String, default: null }
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
 
 userSchema.pre('save', function (next) {
     let salt = bcrypt.genSaltSync(15);
@@ -37,5 +37,11 @@ userSchema.methods.setRememberToken = function (res) {
         if (err) console.log(err);
     });
 }
+
+userSchema.virtual('courses' , {
+    ref : 'Course',
+    localField : '_id',
+    foreignField : 'user'
+})
 
 module.exports = mongoose.model('User', userSchema);
