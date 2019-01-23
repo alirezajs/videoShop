@@ -11,19 +11,40 @@ class courseController extends controller {
 
     async single(req, res) {
 
-        let course =
-            await Course.findOne({ slug: req.params.course })
-                .populate([
-                    { path: 'user', select: 'name' },
-
-                    'episodes'
-
-                ]);
-        return res.json(course);
-        res.render('home/course');
+        let course = await Course.findOne({ slug: req.params.course })
+            .populate([
+                {
+                    path: 'user',
+                    select: 'name'
+                },
+                {
+                    path: 'episodes',
+                    options: {
+                        sort: { number: 1 }
+                    }
+                }
+            ]);
+        let canUserUse = await this.canUse(req, course);
+        res.render('home/single-course', { course, canUserUse });
 
     }
-
+    async canUse(req, course) {
+        let canUse = false;
+        if (req.isAuthenticated()) {
+            switch (course.type) {
+                case 'vip':
+                    canUse = req.user.isVip()
+                    break;
+                case 'cash':
+                    canUse = req.user.checkLearning(course);
+                    break;
+                default:
+                    canUse = true;
+                    break;
+            }
+        }
+        return canUse;
+    }
 }
 
 module.exports = new courseController();

@@ -38,10 +38,22 @@ userSchema.methods.setRememberToken = function (res) {
     });
 }
 
-userSchema.virtual('courses' , {
-    ref : 'Course',
-    localField : '_id',
-    foreignField : 'user'
+userSchema.methods.isVip = function () {
+
+    return true;
+
+}
+userSchema.methods.checkLearning = async function () {
+
+    return false;
+
+}
+
+
+userSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'user'
 })
 
 module.exports = mongoose.model('User', userSchema);
