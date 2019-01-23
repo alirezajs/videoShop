@@ -13,20 +13,20 @@ const EpisodeSchema = Schema({
     downloadCount: { type: Number, default: 0 },
     viewCount: { type: Number, default: 0 },
     commentCount: { type: String, default: 0 },
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
 
 EpisodeSchema.plugin(mongoosePaginate);
 
-EpisodeSchema.methods.typeToPersian = function() {
+EpisodeSchema.methods.typeToPersian = function () {
     switch (this.type) {
         case 'cash':
-                return 'نقدی'
+            return 'نقدی'
             break;
         case 'vip':
             return 'اعضای ویژه'
-        break;    
+            break;
         default:
-            return 'رایگان'    
+            return 'رایگان'
             break;
     }
 }
