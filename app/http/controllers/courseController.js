@@ -26,7 +26,14 @@ class courseController extends controller {
                         sort: { number: 1 }
                     }
                 }
-            ]);
+            ])
+            .populate({
+                path: 'comment',
+                match: {
+                    parent: { $eq: null },
+                    approved: true
+                }
+            })
         let canUserUse = await this.canUse(req, course);
         res.render('home/single-course', { course, canUserUse });
 
@@ -55,6 +62,7 @@ class courseController extends controller {
 
     async canUse(req, course) {
         let canUse = false;
+
         if (req.isAuthenticated()) {
             switch (course.type) {
                 case 'vip':
@@ -68,6 +76,7 @@ class courseController extends controller {
                     break;
             }
         }
+
         return canUse;
     }
 
