@@ -40,12 +40,12 @@ userSchema.methods.setRememberToken = function (res) {
 
 userSchema.methods.isVip = function () {
 
-    return true;
+    return false;
 
 }
 userSchema.methods.checkLearning = async function () {
 
-    return false;
+    return true;
 
 }
 

@@ -61,7 +61,7 @@
                         <%= episode.time %>
                     </td>
                     <td>
-                        <a href="<%= episode.download() %>">دانلود</a>
+                        <a href="<%= episode.download(auth.check,canUserUse) %>">دانلود</a>
                     </td>
                 </tr>
                 <% }) %>
@@ -153,13 +153,15 @@
     </div>
 
     <!-- Blog Sidebar Widgets Column -->
-    <% if(course.type =='cash') { 
-        if(! canUserUse) { %>
+
     <div class="col-md-4">
+        <% if(course.type =='cash') { 
+                if(! canUserUse) { %>
         <div class="card my-4">
 
             <div class="card-body">
-                <p>برای استفاده از این دوره نیاز است این دوره را با مبلغ <%= course.price %> تومان خریداری کنید</p>
+                <p>برای استفاده از این دوره نیاز است این دوره را با مبلغ
+                    <%= course.price %> تومان خریداری کنید</p>
                 <form action="/course/payment" method="post">
                     <input type="hidden" name="course_id" value="5b1e4a0ac4cf2d675052a78a">
                     <button type="submit" class="btn btn-success">خرید دوره</button>
