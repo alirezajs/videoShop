@@ -1,11 +1,18 @@
 const controller = require('app/http/controllers/controller');
 
 class indexController extends controller {
-    index(req , res) {
+    index(req, res) {
         res.render('admin/index');
     }
 
-   
+    uploadImage(req, res) {
+        let image = req.file;
+        res.json({
+            "uploaded" : 1,
+            "fileName" : image.originalname,
+            "url" : `${image.destination}/${image.filename}`.substring(8)
+        });
+    }
 }
 
 module.exports = new indexController();

@@ -1,20 +1,68 @@
 const controller = require('app/http/controllers/controller');
 const Course = require('app/models/course');
 const Episode = require('app/models/episode');
+const Category = require('app/models/category');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+
 class courseController extends controller {
 
     async index(req, res) {
+        let query = {};
+        let { search, type, category } = req.query;
+
+        if (search)
+            query.title = new RegExp(search, 'gi');
+
+        if (type && type != 'all')
+            query.type = type;
+
+        if (category && category != 'all') {
+            category = await Category.findOne({ slug: category });
+            if (category)
+                query.categories = { $in: [category.id] }
+        }
+
+        let courses = Course.find({ ...query });
 
 
-        res.render('home/courses');
+        if (req.query.order)
+            courses.sort({ createdAt: -1 })
+
+        courses = await courses.exec();
+
+        let categories = await Category.find({});
+        res.render('home/courses', { courses, categories });
     }
+    async payment(req, res, next) {
+        try {
+            this.isMongoId(req.body.course);
 
+            let course = await Course.findById(req.body.course);
+            if (!course) {
+                console.log('not found');
+                return;
+            }
+
+            if (await req.user.checkLearning(course.id)) {
+                console.log('شما قبلا در این دوره ثبت نام کرده اید');
+                return;
+            }
+
+            if (course.price == 0 && (course.type == 'vip' || course.type == 'free')) {
+                console.log('این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست');
+                return;
+            }
+
+            // buy proccess
+
+        } catch (err) {
+            next(err);
+        }
+    }
     async single(req, res) {
-
-        let course = await Course.findOne({ slug: req.params.course })
+        let course = await Course.findOneAndUpdate({ slug: req.params.course }, { $inc: { viewCount: 1 } })
             .populate([
                 {
                     path: 'user',
@@ -22,69 +70,66 @@ class courseController extends controller {
                 },
                 {
                     path: 'episodes',
-                    options: {
-                        sort: { number: 1 }
-                    }
+                    options: { sort: { number: 1 } }
                 }
             ])
-            .populate({
-                path: 'comment',
-                match: {
-                    parent: { $eq: null },
-                    approved: true
+            .populate([
+                {
+                    path: 'comments',
+                    match: {
+                        parent: null,
+                        approved: true
+                    },
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'name'
+                        },
+                        {
+                            path: 'comments',
+                            match: {
+                                approved: true
+                            },
+                            populate: { path: 'user', select: 'name' }
+                        }
+                    ]
                 }
-            })
-        let canUserUse = await this.canUse(req, course);
-        res.render('home/single-course', { course, canUserUse });
+            ]);
+        let categories = await Category.find({ parent: null }).populate('childs').exec();
 
+
+        res.render('home/single-course', { course, categories });
     }
 
     async download(req, res, next) {
         try {
             this.isMongoId(req.params.episode);
+
             let episode = await Episode.findById(req.params.episode);
-            if (!episode) this.error("چنین فایلی وجود ندارد", 404);
+            if (!episode) this.error('چنین فایلی برای این جلسه وجود ندارد', 404);
 
-            if (!this.checkHash(req, res, episode)) this.error('اعتبار لینک شما به پایان رسیده است', 404)
+            if (!this.checkHash(req, episode)) this.error('اعتبار لینک شما به پایان رسیده است', 403);
 
-            let filePath = path.resolve(`./public/videos/${episode.videoUrl}`)
+            let filePath = path.resolve(`./public/download/ASGLKET!1241tgsdq415215/${episode.videoUrl}`);
+            if (!fs.existsSync(filePath)) this.error('چنین فایل برای دانلود وجود دارد', 404);
 
-            if (!fs.existsSync(filePath)) this.error('چنین فایلی برای دانلود وجود ندارد', 404);
+            await episode.inc('downloadCount');
 
+            return res.download(filePath)
 
-            res.download(filePath);
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
-
     }
 
-    async canUse(req, course) {
-        let canUse = false;
+  
 
-        if (req.isAuthenticated()) {
-            switch (course.type) {
-                case 'vip':
-                    canUse = req.user.isVip()
-                    break;
-                case 'cash':
-                    canUse = req.user.checkLearning(course);
-                    break;
-                default:
-                    canUse = true;
-                    break;
-            }
-        }
-
-        return canUse;
-    }
-
-    checkHash(req, res, episode) {
-
+    checkHash(req, episode) {
         let timestamps = new Date().getTime();
         if (req.query.t < timestamps) return false;
-        let text = `aQTRQ!#fa38r47sjkhdjfsf${episode.id}${req.query.t}`;
+
+        let text = `aQTR@!#Fa#%!@%SDQGGASDF${episode.id}${req.query.t}`;
+
         return bcrypt.compareSync(text, req.query.mac);
     }
 }

@@ -1,4 +1,4 @@
-# OnLIineShop
+# videoShop
 
 this is my first project by node.js which I learnt fastly from some great website to learn node.js
 

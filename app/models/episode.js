@@ -32,8 +32,8 @@ EpisodeSchema.methods.typeToPersian = function () {
     }
 }
 
-EpisodeSchema.methods.download = function (check, canUserUse) {
-    if (!check) return '#';
+EpisodeSchema.methods.download = function (req) {
+    if (!req.isAuthenticated()) return '#';
 
 
     let status = false;
@@ -42,8 +42,10 @@ EpisodeSchema.methods.download = function (check, canUserUse) {
             status = true;
             break;
         case 'vip':
+            status = req.status.isVip();
+            breakl
         case 'cash':
-            status = canUserUse;
+            status = req.user.checkLearning(this.course)
             break;
     }
     //12 ساعت آینده
@@ -56,5 +58,10 @@ EpisodeSchema.methods.download = function (check, canUserUse) {
 
     return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : "#";
 }
+
+EpisodeSchema.methods.path = function () {
+    return `${this.course.path()}/${this.number}`;
+}
+
 
 module.exports = mongoose.model('Episode', EpisodeSchema);
