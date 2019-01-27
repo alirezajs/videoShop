@@ -8,7 +8,7 @@ class courseController extends controller {
     async index(req, res) {
         try {
             let page = req.query.page || 1;
-            let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 });
+            let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 20 });
 
             res.render('admin/courses/index', { title: 'دوره ها', courses });
         } catch (err) {

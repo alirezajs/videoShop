@@ -37,7 +37,7 @@ module.exports = class Helpers {
     }
 
     date(time) {
-        return moment()
+        return moment(time)
     }
 
     auth() {

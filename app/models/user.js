@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const uniqueString = require('unique-string')
+const mongoosePaginate = require('mongoose-paginate');
 
 const userSchema = Schema({
     name : { type : String , required : true },
@@ -11,6 +12,8 @@ const userSchema = Schema({
     rememberToken : { type : String , default : null },
     learning : [{ type : Schema.Types.ObjectId , ref : 'Course'}],
 } , { timestamps : true , toJSON : { virtuals : true } });
+
+userSchema.plugin(mongoosePaginate);
 
 userSchema.pre('save' , function(next) {
     let salt = bcrypt.genSaltSync(15);

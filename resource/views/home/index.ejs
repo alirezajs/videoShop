@@ -22,7 +22,7 @@
         <h3><a href="<%= course.path() %>">
             <%= course.title %></a></h3>
         <p class="card-text">
-          <%= course.body.substr(0,100) %>
+          <%- course.body.substr(0,100) %>
         </p>
         <a href="<%= course.path() %>" class="btn btn-primary btn-sm">اطلاعات بیشتر</a>
       </div>

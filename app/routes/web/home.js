@@ -4,6 +4,7 @@ const router = express.Router();
 // Controllers
 const homeController = require('app/http/controllers/homeController');
 const courseController = require('app/http/controllers/courseController');
+const userController = require('app/http/controllers/userController');
 
 
 // validators 
@@ -19,10 +20,10 @@ router.get('/about-me', homeController.about);
 router.get('/courses', courseController.index);
 router.get('/courses/:course', courseController.single);
 router.get('/download/:episode', courseController.download);
-router.post('/courses/payment' , courseController.payment);
-router.post("/comment", redirectIfNotAuthenticated.handle, commentValidator.handle(), homeController.comment);
-router.get('/courses/payment/checker' , redirectIfNotAuthenticated.handle , courseController.checker);
+router.post('/courses/payment', courseController.payment);
 
+router.post("/comment", redirectIfNotAuthenticated.handle, commentValidator.handle(), homeController.comment);
+router.get('/courses/payment/checker', redirectIfNotAuthenticated.handle, courseController.checker);
 
 router.get('/logout', (req, res) => {
     req.logout();
@@ -30,6 +31,9 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+
+router.get('/user/panel', userController.index)
+router.get('/user/panel/history', userController.history)
 
 
 
