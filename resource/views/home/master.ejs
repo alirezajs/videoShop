@@ -61,7 +61,22 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <% let sweetalert = req.flash('sweetalert')
+        if(sweetalert.length) {
+          let data = sweetalert[0]; %>
+    <script>
 
+        Swal.fire({
+            title: '<%= data.title %>',
+            text: '<%= data.message %>',
+            type: '<%= data.type %>',
+            showConfirmButton: <%= data.button !== null ? true : false %>,
+            confirmButtonText: '<%= data.button %>',
+            timer: <%= data.button !== null ? 'null' : data.timer %>,
+        })
+    </script>
+    <% } %>
     <%- script %>
 
 </body>

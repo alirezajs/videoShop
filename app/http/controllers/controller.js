@@ -98,8 +98,23 @@ module.exports = class controller {
 
         return sprintf('%02d:%02d:%02d', hours, minutes, second);
     }
-    
+
     slug(title) {
         return title.replace(/([^۰-۹آ-یa-z0-9]|-)+/g, "-")
+    }
+
+    alert(req, data) {
+        let title = data.title || '',
+            message = data.message || '',
+            type = data.type || 'info',
+            button = data.button || null,
+            timer = data.timer || 2000;
+
+        req.flash('sweetalert', { title, message, type, button, timer });
+    }
+
+    alertAndBack(req, res, data) {
+        this.alert(req, data);
+        this.back(req, res);
     }
 }

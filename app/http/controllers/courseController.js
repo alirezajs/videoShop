@@ -2,9 +2,11 @@ const controller = require('app/http/controllers/controller');
 const Course = require('app/models/course');
 const Episode = require('app/models/episode');
 const Category = require('app/models/category');
+const Payment= require('app/models/payment');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const request = require('request-promise');
 
 class courseController extends controller {
 
@@ -41,22 +43,124 @@ class courseController extends controller {
 
             let course = await Course.findById(req.body.course);
             if (!course) {
-                console.log('not found');
-                return;
+                return this.alertAndBack(req, res, {
+                    title: 'دقت کنید',
+                    message: 'چنین دوره ای یافت نشد',
+                    type: 'error'
+                });
             }
 
             if (await req.user.checkLearning(course.id)) {
-                console.log('شما قبلا در این دوره ثبت نام کرده اید');
-                return;
+                return this.alertAndBack(req, res, {
+                    title: 'دقت کنید',
+                    message: 'شما قبلا در این دوره ثبت نام کرده اید',
+                    type: 'error',
+                    button: 'خیلی خوب'
+                });
             }
 
             if (course.price == 0 && (course.type == 'vip' || course.type == 'free')) {
-                console.log('این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست');
-                return;
+                return this.alertAndBack(req, res, {
+                    title: 'دقت کنید',
+                    message: 'این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست',
+                    type: 'error',
+                    button: 'خیلی خوب'
+                });
             }
 
             // buy proccess
+            // return this.alertAndBack(req, res, {
+            //     title: 'دقت کنید',
+            //     message: 'هنوز بخش خرید درست نشده',
+            //     type: 'error',
+            //     button: 'خیلی خوب'
+            // });
 
+
+            let params = {
+                MerchantID: 'f83cc956-f59f-11e6-889a-005056a205be',
+                Amount: course.price,
+                CallbackURL: 'http://localhost:3000/courses/payment/checker',
+                Description: `بابت خرید دوره ${course.title}`,
+                Email: req.user.email
+            };
+
+            let options = this.getUrlOption(
+                'https://www.zarinpal.com/pg/rest/WebGate/PaymentRequest.json',
+                params
+            );
+
+            request(options)
+                .then(async data => {
+                    let payment = new Payment({
+                        user: req.user.id,
+                        course: course.id,
+                        resnumber: data.Authority,
+                        price: course.price
+                    });
+
+                    await payment.save();
+
+                    res.redirect(`https://www.zarinpal.com/pg/StartPay/${data.Authority}`)
+                })
+                .catch(err => res.json(err.message));
+
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async checker(req, res, next) {
+        try {
+            if (req.query.Status && req.query.Status !== 'OK')
+                return this.alertAndBack(req, res, {
+                    title: 'دقت کنید',
+                    message: 'پرداخت شما با موفقیت انجام نشد',
+                });
+
+            let payment = await Payment.findOne({ resnumber: req.query.Authority }).populate('course').exec();
+
+            if (!payment.course)
+                return this.alertAndBack(req, res, {
+                    title: 'دقت کنید',
+                    message: 'دوره ای که شما پرداخت کرده اید وجود ندارد',
+                    type: 'error'
+                });
+
+            let params = {
+                MerchantID: 'f3cc956-f59f-11e6-889a-005056a205be',
+                Amount: payment.course.price,
+                Authority: req.query.Authority
+            }
+
+            let options = this.getUrlOption('https://www.zarinpal.com/pg/rest/WebGate/PaymentVerification.json', params)
+
+            request(options)
+                .then(async data => {
+                    if (data.Status == 100) {
+                        payment.set({ payment: true });
+                        req.user.learning.push(payment.course.id);
+
+                        await payment.save();
+                        await req.user.save();
+
+                        this.alert(req, {
+                            title: 'با تشکر',
+                            message: 'عملیات مورد نظر با موفقیت انجام شد',
+                            type: 'success',
+                            button: 'بسیار خوب'
+                        })
+
+                        res.redirect(payment.course.path());
+                    } else {
+                        this.alertAndBack(req, res, {
+                            title: 'دقت کنید',
+                            message: 'پرداخت شما با موفقیت انجام نشد',
+                        });
+                    }
+                }).catch(err => {
+                    next(err);
+                })
         } catch (err) {
             next(err);
         }
@@ -122,7 +226,7 @@ class courseController extends controller {
         }
     }
 
-  
+
 
     checkHash(req, episode) {
         let timestamps = new Date().getTime();
@@ -131,6 +235,19 @@ class courseController extends controller {
         let text = `aQTR@!#Fa#%!@%SDQGGASDF${episode.id}${req.query.t}`;
 
         return bcrypt.compareSync(text, req.query.mac);
+    }
+
+    getUrlOption(url , params) {
+        return {
+            method : 'POST',
+            uri : url,
+            headers : {
+                'cache-control' : 'no-cache',
+                'content-type' : 'application/json'
+            },
+            body : params,
+            json: true
+        }
     }
 }
 

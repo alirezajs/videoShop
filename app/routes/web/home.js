@@ -21,7 +21,7 @@ router.get('/courses/:course', courseController.single);
 router.get('/download/:episode', courseController.download);
 router.post('/courses/payment' , courseController.payment);
 router.post("/comment", redirectIfNotAuthenticated.handle, commentValidator.handle(), homeController.comment);
-
+router.get('/courses/payment/checker' , redirectIfNotAuthenticated.handle , courseController.checker);
 
 
 router.get('/logout', (req, res) => {
