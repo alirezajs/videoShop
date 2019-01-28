@@ -11,6 +11,8 @@ const userSchema = Schema({
     password : { type : String ,  required : true },
     rememberToken : { type : String , default : null },
     learning : [{ type : Schema.Types.ObjectId , ref : 'Course'}],
+    roles : [{ type : Schema.Types.ObjectId , ref : 'Role'}],
+
 } , { timestamps : true , toJSON : { virtuals : true } });
 
 userSchema.plugin(mongoosePaginate);

@@ -6,7 +6,7 @@ const path = require('path');
 const sharp = require('sharp');
 
 class episodeController extends controller {
-    async index(req , res) {
+    async index(req , res,next) {
         try {
             let page = req.query.page || 1;
             let episodes = await Episode.paginate({} , { page , sort : { createdAt : 1 } , limit : 2 });

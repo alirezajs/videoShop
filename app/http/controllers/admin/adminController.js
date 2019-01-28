@@ -1,7 +1,7 @@
 const controller = require('app/http/controllers/controller');
 
 class indexController extends controller {
-    index(req, res) {
+    index(req, res,next) {
         res.render('admin/index');
     }
 

@@ -5,7 +5,7 @@ const path = require('path');
 const sharp = require('sharp');
 
 class categoryController extends controller {
-    async index(req, res) {
+    async index(req, res,next) {
         try {
             let page = req.query.page || 1;
             let categories = await Category.paginate({}, { page, sort: { createdAt: 1 }, limit: 20, populate: 'parent' });
