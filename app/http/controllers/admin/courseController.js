@@ -5,7 +5,7 @@ const path = require('path');
 const sharp = require('sharp');
 const Category = require("app/models/category");
 class courseController extends controller {
-    async index(req, res,next) {
+    async index(req, res, next) {
         try {
             let page = req.query.page || 1;
             let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 20 });
@@ -60,6 +60,10 @@ class courseController extends controller {
 
             let course = await Course.findById(req.params.id);
             if (!course) this.error('چنین دوره ای وجود ندارد', 404);
+            req.courseUserId = course.user;
+            if (!req.userCan('edit-courses')) {
+                this.error("شما اجازه دسترسی به این صفحه را ندارید", 403)
+            }
 
             let categories = await Category.find({});
             return res.render('admin/courses/edit', { course, categories });

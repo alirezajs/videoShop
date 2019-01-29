@@ -45,6 +45,14 @@ userSchema.methods.setRememberToken = function(res) {
     });
 }
 
+userSchema.methods.hasRole = function(roles) { 
+    let result = roles.filter(role => {
+        return this.roles.indexOf(role) > -1;
+    })
+
+    return !! result.length;
+}
+
 userSchema.virtual('courses' , {
     ref : 'Course',
     localField : '_id',
