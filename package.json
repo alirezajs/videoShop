@@ -24,6 +24,7 @@
     "express-recaptcha": "^4.0.2",
     "express-session": "^1.15.6",
     "express-validator": "^5.1.2",
+    "i18n": "^0.8.3",
     "method-override": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment-jalaali": "^0.8.3",

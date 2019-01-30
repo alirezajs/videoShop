@@ -5,6 +5,7 @@ module.exports = {
     public_dir: 'public',
     view_dir: path.resolve('./resource/views'),
     view_engine: 'ejs',
+    locales_directory : path.resolve('./resource/lang'),
     ejs: {
        expressLayouts,
        extractScripts:true,

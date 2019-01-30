@@ -12,7 +12,6 @@ const userSchema = Schema({
     rememberToken : { type : String , default : null },
     learning : [{ type : Schema.Types.ObjectId , ref : 'Course'}],
     roles : [{ type : Schema.Types.ObjectId , ref : 'Role'}],
-
 } , { timestamps : true , toJSON : { virtuals : true } });
 
 userSchema.plugin(mongoosePaginate);
@@ -37,13 +36,6 @@ userSchema.methods.comparePassword = function(password) {
     return bcrypt.compareSync(password , this.password);
 }
 
-userSchema.methods.setRememberToken = function(res) {
-    const token = uniqueString();
-    res.cookie('remember_token' , token , { maxAge : 1000 * 60 * 60 * 24 * 90 , httpOnly : true , signed :true});
-    this.update({ rememberToken : token } , err => {
-        if(err) console.log(err);
-    });
-}
 
 userSchema.methods.hasRole = function(roles) { 
     let result = roles.filter(role => {
@@ -51,6 +43,15 @@ userSchema.methods.hasRole = function(roles) {
     })
 
     return !! result.length;
+}
+
+
+userSchema.methods.setRememberToken = function(res) {
+    const token = uniqueString();
+    res.cookie('remember_token' , token , { maxAge : 1000 * 60 * 60 * 24 * 90 , httpOnly : true , signed :true});
+    this.update({ rememberToken : token } , err => {
+        if(err) console.log(err);
+    });
 }
 
 userSchema.virtual('courses' , {

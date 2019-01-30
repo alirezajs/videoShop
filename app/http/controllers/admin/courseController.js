@@ -43,7 +43,8 @@ class courseController extends controller {
                 price,
                 images,
                 thumb: images[480],
-                tags
+                tags,
+                lang
             });
 
             await newCourse.save();
