@@ -3,6 +3,7 @@ const passport = require('passport');
 const PasswordReset = require('app/models/password-reset');
 const User = require("app/models/user");
 const uniqueString = require('unique-string')
+const mail = require('app/helpers/mail');
 
 
 
@@ -43,10 +44,35 @@ class forgotPasswordController extends controller {
 
         await newPasswordReset.save();
 
-        // send Mail
+        //send Mail
+        let mailOptions = {
+            from: '"مجله آموزشی مهدیه 👻" <alireza.varmaghani@gmail.com>', // sender address
+            to: `${newPasswordReset.email}`, // list of receivers
+            subject: 'ریست کردن پسورد', // Subject line
+            html: `
+                <h2>ریست کردن پسورد</h2>
+                <p>برای ریست کردن پسورد بر روی لینک زیر کلیک کنید</p>
+                <a href="${config.siteurl}/auth/password/reset/${newPasswordReset.token}">ریست کردن</a>
+            ` // html body
+        };
+
+        mail.sendMail(mailOptions  , (err , info) => {
+            if(err) return console.log(err);
+
+            console.log('Message Sent : %s' , info.messageId);
+
+            this.alert(req, {
+                title : 'دقت کنید',
+                message : 'ایمیل حاوی لینک پسورد به ایمیل شما ارسال شد',
+                type  : 'success'
+            });
+
+            return res.redirect('/');
+
+        })
 
         // req.flash('success' , 'ایمیل بازیابی رمز عبور با موفقیت انجام شد');
-        res.redirect('/');
+        // res.redirect('/');
     }
 
 
