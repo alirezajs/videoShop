@@ -38,6 +38,7 @@ module.exports = class Application {
     setConfig() {
         require('app/passport/passport-local');
         require('app/passport/passport-google');
+        require('app/passport/passport-jwt');
 
         app.use(express.static(config.layout.public_dir));
         app.set('view engine', config.layout.view_engine);
