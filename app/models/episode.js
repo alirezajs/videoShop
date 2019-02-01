@@ -32,16 +32,16 @@ episodeSchema.methods.typeToPersian = function() {
     }
 }
 
-episodeSchema.methods.download = function(req) {
-    if(! req.isAuthenticated()) return '#';
+episodeSchema.methods.download = function(check , user) {
+    if(! check) return '#';
 
     let status = false;
     if(this.type == 'free') {
         status = true;
     } else if(this.type == 'vip') {
-        status = req.user.isVip();
+        status = user.isVip();
     } else if(this.type == 'cash') {
-        status = req.user.checkLearning(this.course)
+        status = user.checkLearning(this.course)
     }
 
     let timestamps = new Date().getTime() + 3600 * 1000 * 12;

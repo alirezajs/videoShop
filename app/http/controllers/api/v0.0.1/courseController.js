@@ -4,7 +4,6 @@ const Episode = require('app/models/episode');
 const Comment = require('app/models/comment');
 const passport = require('passport');
 
-
 class courseController extends controller {
 
     async courses(req, res, next) {
@@ -12,9 +11,7 @@ class courseController extends controller {
             let page = req.query.page || 1;
             let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 12, populate: [{ path: 'categories' }, { path: 'user' }] });
 
-
             res.json({
-                // data: courses,
                 data: this.filterCoursesData(courses),
                 status: 'success'
             })
@@ -23,64 +20,6 @@ class courseController extends controller {
             this.failed(err.message, res);
         }
     }
-
-    async singleCourse(req, res) {
-        try {
-            let course = await Course.findByIdAndUpdate(req.params.course, { $inc: { viewCount: 1 } })
-                .populate([
-                    {
-                        path: 'user',
-                        select: 'name'
-                    },
-                    {
-                        path: 'episodes',
-                        options: { sort: { number: 1 } }
-                    },
-                    {
-                        path: 'categories',
-                        select: 'name slug'
-                    }
-                ]);
-
-            if (!course) return this.failed('چنین دوره ای یافت نشد', res, 404);
-
-
-            passport.authenticate('jwt', { session: false }, (err, user, info) => {
-
-                res.json({
-                    data: this.filterCourseData(course, user),
-                    status: 'success'
-                });
-
-            })(req, res);
-
-        } catch (err) {
-            this.failed(err.message, res);
-        }
-    }
-
-    async commentForSingleCourse(req, res) {
-        try {
-            let comments = await Comment.find({ course: req.params.course, parent: null, approved: true })
-                .populate([
-                    {
-                        path: 'user',
-                        select: 'name'
-                    },
-                    {
-                        path: 'comments',
-                        match: {
-                            approved: true
-                        },
-                        populate: { path: 'user', select: 'name' }
-                    }
-                ])
-            return res.json(comments);
-        } catch (err) {
-            this.failed(err.message, res);
-        }
-    }
-
 
     filterCoursesData(courses) {
         return {
@@ -106,6 +45,41 @@ class courseController extends controller {
                     createdAt: course.createdAt
                 }
             })
+        }
+    }
+
+    async singleCourse(req, res) {
+        try {
+            let course = await Course.findByIdAndUpdate(req.params.course, { $inc: { viewCount: 1 } })
+                .populate([
+                    {
+                        path: 'user',
+                        select: 'name'
+                    },
+                    {
+                        path: 'episodes',
+                        options: { sort: { number: 1 } }
+                    },
+                    {
+                        path: 'categories',
+                        select: 'name slug'
+                    }
+                ]);
+
+            if (!course) return this.failed('چنین دوره ای یافت نشد', res, 404);
+
+            passport.authenticate('jwt', { session: false }, (err, user, info) => {
+
+                res.json({
+                    data: this.filterCourseData(course, user),
+                    status: 'success'
+                });
+
+            })(req, res);
+
+
+        } catch (err) {
+            this.failed(err.message, res);
         }
     }
 
@@ -143,6 +117,28 @@ class courseController extends controller {
             }),
             price: course.price,
             createdAt: course.createdAt
+        }
+    }
+
+    async commentForSingleCourse(req, res) {
+        try {
+            let comments = await Comment.find({ course: req.params.course, parent: null, approved: true })
+                .populate([
+                    {
+                        path: 'user',
+                        select: 'name'
+                    },
+                    {
+                        path: 'comments',
+                        match: {
+                            approved: true
+                        },
+                        populate: { path: 'user', select: 'name' }
+                    }
+                ])
+            return res.json(comments);
+        } catch (err) {
+            this.failed(err.message, res);
         }
     }
 }
