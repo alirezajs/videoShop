@@ -7,7 +7,7 @@ let gate = new ConnectRoles({
     // user fails authorisation
     var accept = req.headers.accept || '';
 
-    res.locals.layout="errors/master"
+    res.locals.layout="errors/master";
     
     res.status(403);
     if (accept.indexOf('html')) {

@@ -27,7 +27,7 @@
             <select name="categories" id="categories" class="form-control form-control-chosen" data-placeholder="دسته بندی مورد نظر ..."
                 multiple>
                 <% categories.forEach(cate => { %>
-                <option value="<%= cate.id %>" <%=course.categories.indexOf(cate.id) !==-1 ? 'selected' : '' %> >
+                <option value="<%= cate.id %>" <%=old('categories').indexOf(cate.id) !==-1 ? 'selected' : '' %> >
                     <%= cate.name %>
                 </option>
                 <% }) %>
