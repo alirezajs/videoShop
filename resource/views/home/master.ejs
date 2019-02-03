@@ -1,75 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *Must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
     <title>
-        <%- defineContent('title') || 'مجله آموزشی مهدیه'  %>
+        <%- defineContent('title') || 'مجله آموزشی باهوشان'  %>
     </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicon -->
+    <link rel="icon" href="/img/core-img/favicon.ico">
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/bootstrap-rtl.min.css" />
     <link rel="stylesheet" href="/css/vazir.css">
-    <% if(req.getLocale()=='fa'){ %>
-    <link rel="stylesheet" href="/css/home.css">
-    <% } else if(req.getLocale()=='en'){ %>
-    <link rel="stylesheet" href="/css/home-en.css">
-    <% }  %>
-    <%- style %>
 
+    <%- style %>
 </head>
 
 <body>
-
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">مجله آموزشی مهدیه</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">صفحه اصلی</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/courses">دوره ها</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about-me">درباره ما</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <% if(req.getLocale()=='fa'){ %>
-                        <li><a class="btn btn-info btn-sm ml-2" href="/lang/en">زبان انگلیسی</a></li>
-                    <% } else if(req.getLocale()=='en'){ %>
-                        <li><a class="btn btn-info btn-sm ml-2" href="/lang/fa">زبان فارسی</a></li>
-                    <% }  %>
-                    <% if(auth.check) { %>
-                    <li><a class="btn btn-success btn-sm ml-2" href="/user/panel">پنل کاربری</a></li>
-                    <li><a class="btn btn-danger btn-sm" href="logout">خروج</a></li>
-                    <% } else { %>
-                    <li><a class="btn btn-success btn-sm ml-2" href="/auth/login">ورود</a></li>
-                    <li><a class="btn btn-primary btn-sm" href="/auth/register">عضویت</a></li>
-                    <% } %>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <%- body %>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
     </div>
 
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- Top Header Area -->
+        <div class="top-header-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +98 937 439 1095</a>
+                <a href="#"><span>Email:</span> alireza.varmaghani@gmail.com</a>
+            </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>ما را دنبال کنید</span>
+                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/"><img src="/img/core-img/logo.png" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li><a href="/">صفحه اصلی</a></li>
+                                <!-- <li><a href="#">دوره ها</a>
+                                    <ul class="dropdown">
+                                        <li><a href="index.html">صفحه اصلی</a></li>
+                                        <li><a href="courses.html">دوره ها</a></li>
+                                        <li><a href="contact.html">تماس با ما</a></li>
+                                    </ul>
+                                </li> -->
+                                <li><a href="courses">دوره ها</a></li>
+                                <li><a href="#">مقالات</a></li>
+                                <li><a href="#">وبلاگ</a></li>
+                                <li><a href="/about-me">درباره ما</a></li>
+                                <li><a href="/contact-us">تماس با ما</a></li>
+                            </ul>
+
+                            <!-- Search Button -->
+                            <div class="search-area">
+                                <form action="/courses" method="GET">
+                                    <input type="search" name="search" id="search" placeholder="دنبال چی میگردی ؟">
+                                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </form>
+                            </div>
+
+                            <!-- Register / Login -->
+                            <div class="register-login-area">
+                                <% if(req.getLocale()=='fa'){ %>
+                                <a href="/lang/en" class="btn">زبان انگلیسی</a>
+                                <% } else if(req.getLocale()=='en'){ %>
+                                <a href="/lang/fa" class="btn">زبان فارسی</a>
+                                <% }  %>
+                                <% if(auth.check) { %>
+                                <a href="/user/panel" class="btn">پنل کاربری</a>
+                                <a href="/logout" class="btn active">خروج</a>
+                                <% } else { %>
+                                <a href="/auth/register" class="btn">ثبت نام</a>
+                                <a href="/auth/login" class="btn active">ورود</a>
+                                <% } %>
+                            </div>
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+    <%- body %>
 
 
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area">
+        <!-- Top Footer Area -->
+        <div class="top-footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Footer Logo -->
+                        <div class="footer-logo">
+                            <a href="/"><img src="/img/core-img/logo2.png" alt=""></a>
+                        </div>
+                        <!-- Copywrite -->
+                        <p><a href="#">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                                template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                    target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer Area -->
+        <div class="bottom-footer-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +98 937 439 1095</a>
+                <a href="#"><span>Email:</span> alireza.varmaghani@gmail.com</a>
+            </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="/js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/js/active.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <% let sweetalert = req.flash('sweetalert')
         if(sweetalert.length) {
@@ -87,7 +195,6 @@
     </script>
     <% } %>
     <%- script %>
-
 </body>
 
 </html>

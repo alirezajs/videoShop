@@ -46,7 +46,7 @@ class forgotPasswordController extends controller {
 
         //send Mail
         let mailOptions = {
-            from: '"مجله آموزشی مهدیه 👻" <alireza.varmaghani@gmail.com>', // sender address
+            from: '"مجله آموزشی باهوش ها 👻" <alireza.varmaghani@gmail.com>', // sender address
             to: `${newPasswordReset.email}`, // list of receivers
             subject: 'ریست کردن پسورد', // Subject line
             html: `

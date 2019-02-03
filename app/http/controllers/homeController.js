@@ -75,7 +75,7 @@ class homeController extends controller {
     async feedCourses(req , res , next) {
         try {
             let feed = new rss({
-                title : 'فید خوان دوره های مهدیه',
+                title : 'فید خوان دوره های باهوش ها',
                 description : 'جدیدترین دوره ها را از طریق rss بخوانید',
                 feed_url : `${config.siteurl}/feed/courses`,
                 site_url : config.site_url,
@@ -103,7 +103,7 @@ class homeController extends controller {
     async feedEpisodes(req , res , next) {
         try {
             let feed = new rss({
-                title : 'فید خوان جلسات دوره های های مهدیه',
+                title : 'فید خوان جلسات دوره های های باهوش ها',
                 description : 'جدیدترین دوره ها را از طریق rss بخوانید',
                 feed_url : `${config.siteurl}/feed/courses`,
                 site_url : config.site_url,

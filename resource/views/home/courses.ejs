@@ -1,81 +1,148 @@
-<header class="jumbotron hero-spacer">
-        <h1>دوره‌های آموزشی</h1>
-        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
-    </header>
-    
-    <%
-    
-      let { search , type , order , category } = req.query; 
-    
-    %>
-    
-    
-    <form action="/courses" method="GET">
-    
-      <% if(search) { %> 
-        <div class="form-group col-md-3">
-          <input type="hidden" name="search" value="<%= search %>">
-          <span>عبارت جستجو شده : <%= search %> <a href="/courses?<%= type ? 'type=' + type : '' %><%= order ? '&order=1' : '' %>" class="btn btn-sm btn-dark">حذف</a></span> 
-        </div>  
-      <% } %>
-     
-    
-      <div class="form-group col-md-3">
-          <select name="type" class="form-control">
-              <option value="all">همه دوره ها</option>
-              <option value="vip" <%= type === 'vip' ? 'selected' : '' %> >اعضای ویژه</option>
-              <option value="cash" <%= type === 'cash' ? 'selected' : '' %> >نقدی</option>
-              <option value="free" <%= type === 'free' ? 'selected' : '' %> >رایگان</option>
-          </select>
-      </div>
-    
-      <div class="form-group col-md-3">
-            <select name="category" class="form-control">
-                <option value="all">همه دسته ها</option>
-                <% categories.forEach(cate => { %>
-                    <option value="<%= cate.slug %>" <%= cate.slug === category ? 'selected' : '' %> ><%= cate.name %></option>
-                <% }) %>
-            </select>
-        </div>
-    
-    
-      <div class="form-group col-md-3">
-          <label class="checkbox-inline">
-              <input type="checkbox" name="order" value="1" class="ml-2" <%= order === '1' ? 'checked' : '' %>>از اول به آخر
-          </label>
-      </div>
-    
-      <div class="form-group col-md-3">
-          <button class="btn btn-danger" type="submit">فیلتر</button>
-      </div>
-    </form>
-    
-    <hr>
-    
-    <% if(courses.length) { %> 
-        <div class="row">
-                <% courses.forEach(course => { %>
-                  <div class="col-6 col-md-3">
-                      <div class="card">
-                          <img class="card-img-top" src="<%= course.thumb %>" alt="<%= course.title %>">
-                          <div class="card-body">
-                            <h3><a href="<%= course.path() %>"><%= course.title %></a></h3>
-                            <p class="card-text"><%- course.body.substr(0,100) %></p>
-                            <a href="<%= course.path() %>" class="btn btn-primary btn-sm">اطلاعات بیشتر</a>
-                          </div>
-                          <div class="card-footer text-muted">
-                            <%= course.viewCount %> بازدید
-                          </div>
-                      </div>
-                  </div>
-                <% }) %>
+<% let { search , type , order , category } = req.query;  %>
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area">
+    <!-- Breadcumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+            <li class="breadcrumb-item"><a href="#">دوره ها</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <%= category && category!=='all' ? category :  'همه دوره ها' %>
+            </li>
+        </ol>
+    </nav>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+
+<!-- ##### Catagory ##### -->
+<div class="clever-catagory bg-img d-flex align-items-center justify-content-center p-3" style="background-image: url(img/bg-img/bg2.jpg);">
+    <h3>
+        <%= category && category!=='all' ? category :  'همه دوره ها' %>
+    </h3>
+</div>
+<div class="container-flut">
+    <div class="row">
+        <div class="col-12 col-md-12 ">
+
+
+            <div class="sidebar-widget">
+                <h4>فیلتر ها</h4>
+                <div class="features-list">
+                    <form action="/courses" method="GET">
+
+                        <% if(search) { %>
+                        <div class="form-group col-md-3">
+                            <input type="hidden" name="search" value="<%= search %>">
+                            <span>عبارت جستجو شده :
+                                <%= search %> <a href="/courses?<%= type ? 'type=' + type : '' %><%= order ? '&order=1' : '' %>"
+                                    class="btn btn-sm btn-dark">حذف</a></span>
+                        </div>
+                        <% } %>
+
+                        <div class="form-group col-md-3">
+                            <select name="type" class="form-control">
+                                <option value="all">همه دوره ها</option>
+                                <option value="vip" <%=type==='vip' ? 'selected' : '' %> >اعضای ویژه</option>
+                                <option value="cash" <%=type==='cash' ? 'selected' : '' %> >نقدی</option>
+                                <option value="free" <%=type==='free' ? 'selected' : '' %> >رایگان</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <select name="category" class="form-control">
+                                <option value="all">همه دسته ها</option>
+                                <% categories.forEach(cate => { %>
+                                <option value="<%= cate.slug %>" <%=cate.slug===category ? 'selected' : '' %> >
+                                    <%= cate.name %>
+                                </option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-3">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="order" value="1" class="ml-2" <%=order==='1' ? 'checked' :
+                                    '' %>>از
+                                اول به
+                                آخر
+                            </label>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-danger" type="submit">فیلتر</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-    <% } else { %>
-        <div class="row">
-            <p>دوره ای یافت نشد</p>
         </div>
-    <%} %>
-    
-    
-    <%- include(viewPath('layouts/pagination') ,{ pagination : courses}) %>
-    
+
+
+        <div class="col-12 col-md-12">
+            <!-- ##### Popular Course Area Start ##### -->
+            <section class="popular-courses-area section-padding-100">
+                <div class="container">
+                    <% if(courses.length) { %>
+                    <div class="row">
+                        <% courses.forEach(course => { %>
+                        <!-- Single Popular Course -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
+                                <img src="<%= course.thumb %>" alt="<%= course.title %>">
+                                <!-- Course Content -->
+                                <div class="course-content">
+                                    <h4>
+                                        <%= course.title %>
+                                    </h4>
+                                    <div class="meta d-flex align-items-center">
+                                        <a href="#">Sarah Parker</a>
+                                        <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                                        <a href="#">Art &amp; Design</a>
+                                    </div>
+                                    <p>
+                                        <%- course.body.substr(0,100) %>
+                                    </p>
+                                </div>
+                                <!-- Seat Rating Fee -->
+                                <div class="seat-rating-fee d-flex justify-content-between">
+                                    <div class="seat-rating h-100 d-flex align-items-center">
+                                        <div class="seat">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                            <%= course.viewCount %>
+                                        </div>
+                                        <div class="rating">
+                                            <i class="fa fa-star" aria-hidden="true"></i> 4.5
+                                        </div>
+                                    </div>
+                                    <div class="course-fee h-100">
+                                        <% if(course.type==='vip') { %>
+                                        <a href="<%= course.path() %>" class="free">رایگان</a>
+                                        <% } else if(course.type=='cash') { %>
+                                        <a href="<%= course.path() %>">
+                                            <%= course.price %>
+                                            تومان
+                                        </a>
+                                        <% } else { %>
+                                        <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
+                                        <%} %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% }) %>
+                    </div>
+                    <% } else { %>
+                    <div class="row">
+                        <p>دوره ای یافت نشد</p>
+                    </div>
+                    <%} %>
+
+                    <%- include(viewPath('layouts/pagination') ,{ pagination : courses}) %>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<!-- ##### Popular Course Area End ##### -->
