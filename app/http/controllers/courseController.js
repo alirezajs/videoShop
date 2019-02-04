@@ -229,7 +229,9 @@ class courseController extends controller {
         }
     }
 
-
+    async episode(req,res,next){
+        res.json("you calle me")
+    }
 
     checkHash(req, episode) {
         let timestamps = new Date().getTime();

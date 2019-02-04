@@ -247,10 +247,13 @@
                                                 <ul>
                                                     <% course.episodes.forEach(episode => { %>
                                                     <li class="ROW">
+
                                                         <span class="col-lg-6">
-                                                            <i class="fa fa-video-camera" aria-hidden="true"></i>
-                                                            <span>
-                                                                <%= episode.title %></span>
+                                                            <a href="/courses/<%= course.slug %>/episode/<%=episode.id%>">
+                                                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                                                <span>
+                                                                    <%= episode.title %></span>
+                                                            </a>
                                                         </span>
 
                                                         <span class="col-lg-4">
@@ -543,7 +546,7 @@
                                         </div>
 
                                         <div class="rating-viewer">
-                                         
+
                                             <!-- Rating -->
                                             <div class="single-rating mb-15 d-flex align-items-center">
                                                 <span>به روز بودن مطالب</span>

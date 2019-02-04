@@ -19,6 +19,7 @@ router.get('/', homeController.index);
 router.get('/about-me', homeController.about);
 router.get('/courses', courseController.index);
 router.get('/courses/:course', courseController.single);
+router.get('/courses/:course/episode/:episode', courseController.episode);
 router.get('/download/:episode', courseController.download);
 router.post('/courses/payment', courseController.payment);
 
