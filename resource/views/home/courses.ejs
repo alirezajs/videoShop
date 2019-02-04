@@ -117,14 +117,14 @@
                                     </div>
                                     <div class="course-fee h-100">
                                         <% if(course.type==='vip') { %>
-                                        <a href="<%= course.path() %>" class="free">رایگان</a>
+                                        <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
                                         <% } else if(course.type=='cash') { %>
                                         <a href="<%= course.path() %>">
                                             <%= course.price %>
                                             تومان
                                         </a>
                                         <% } else { %>
-                                        <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
+                                        <a href="<%= course.path() %>" class="free">رایگان</a>
                                         <%} %>
                                     </div>
                                 </div>

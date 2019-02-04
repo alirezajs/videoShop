@@ -32,7 +32,6 @@ h6 {
   font-weight: 700; }
 
 p {
-  font-family: "Raleway", sans-serif;
   color: #5a5a5a;
   font-size: 14px;
   line-height: 1.8;
@@ -837,7 +836,6 @@ textarea:focus {
     .clever-curriculum .curriculum-level .curriculum-list li {
       display: block;
       margin-bottom: 10px;
-      font-family: "Raleway", sans-serif;
       font-size: 14px;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.5); }
@@ -1583,7 +1581,6 @@ textarea:focus {
     font-size: 16px;
     line-height: 1.9; }
   .blog-details-text h5 {
-    font-family: "Raleway", sans-serif;
     font-size: 18px;
     line-height: 1.9; }
   .blog-details-text .post-tags {
@@ -1888,11 +1885,11 @@ textarea:focus {
     margin-bottom: 0;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.2);
-    font-family: "Open Sans", sans-serif; }
+    }
     .top-footer-area p a {
       color: rgba(255, 255, 255, 0.2);
       font-size: 12px;
-      font-family: "Open Sans", sans-serif; }
+     }
       .top-footer-area p a:hover, .top-footer-area p a:focus {
         color: #ffffff; }
 

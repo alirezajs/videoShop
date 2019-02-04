@@ -2,7 +2,7 @@ const controller = require('app/http/controllers/controller');
 const Course = require('app/models/course');
 const Episode = require('app/models/episode');
 const Category = require('app/models/category');
-const Payment= require('app/models/payment');
+const Payment = require('app/models/payment');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
@@ -30,6 +30,8 @@ class courseController extends controller {
 
 
         if (req.query.order)
+            courses.sort({ createdAt: 1 })
+        else
             courses.sort({ createdAt: -1 })
 
         courses = await courses.exec();
@@ -201,8 +203,9 @@ class courseController extends controller {
             ]);
         let categories = await Category.find({ parent: null }).populate('childs').exec();
 
+        let courses = await Course.find({lang:req.getLocale()}).sort({ createdAt: -1 }).limit(3).exec();
 
-        res.render('home/single-course', { course, categories });
+        res.render('home/single-course', { course, categories, courses });
     }
 
     async download(req, res, next) {
@@ -237,15 +240,15 @@ class courseController extends controller {
         return bcrypt.compareSync(text, req.query.mac);
     }
 
-    getUrlOption(url , params) {
+    getUrlOption(url, params) {
         return {
-            method : 'POST',
-            uri : url,
-            headers : {
-                'cache-control' : 'no-cache',
-                'content-type' : 'application/json'
+            method: 'POST',
+            uri: url,
+            headers: {
+                'cache-control': 'no-cache',
+                'content-type': 'application/json'
             },
-            body : params,
+            body: params,
             json: true
         }
     }
