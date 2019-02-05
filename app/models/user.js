@@ -40,7 +40,6 @@ userSchema.methods.comparePassword = function(password) {
 
 
 userSchema.methods.hasRole = function(roles) { 
-    console.log(role);
     let result = roles.filter(role => {
         return this.roles.indexOf(role) > -1;
     })
