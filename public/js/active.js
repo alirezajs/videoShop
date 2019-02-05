@@ -15,7 +15,7 @@
         var $this = $(this),
             finalDate = $(this).data('countdown');
         $this.countdown(finalDate, function (event) {
-            $this.html(event.strftime('<div>%D <span>Days</span></div> <div>%H <span>Hours</span></div> <div>%M <span>Minutes</span></div> <div>%S <span>Seconds</span></div>'));
+            $this.html(event.strftime('<div>%D <span>روز</span></div> <div>%H <span>ساعت</span></div> <div>%M <span>دقیقه</span></div> <div>%S <span>ثانیه</span></div>'));
         });
     });
 

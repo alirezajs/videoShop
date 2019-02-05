@@ -203,9 +203,9 @@ class courseController extends controller {
             ]);
         let categories = await Category.find({ parent: null }).populate('childs').exec();
 
-        let courses = await Course.find({lang:req.getLocale()}).sort({ createdAt: -1 }).limit(3).exec();
-
-        res.render('home/single-course', { course, categories, courses });
+        let courses = await Course.find({ lang: req.getLocale() }).sort({ createdAt: -1 }).limit(3).exec();
+        let episode={};
+        res.render('home/single-course', { course, categories, courses,episode });
     }
 
     async download(req, res, next) {
@@ -229,16 +229,72 @@ class courseController extends controller {
         }
     }
 
-    async episode(req,res,next){
-        res.json("you calle me")
+    async episode(req, res, next) {
+        try {
+            this.isMongoId(req.params.episode);
+
+            let episode = await Episode.findById(req.params.episode);
+            if (!episode) this.error('چنین فایلی برای این جلسه وجود ندارد', 404);
+
+
+            let url = await episode.download(req.isAuthenticated(), req.user);
+
+            if (url != "#")
+                episode.url = config.siteurl + url;
+
+
+            let course = await Course.findOneAndUpdate({ slug: req.params.course }, { $inc: { viewCount: 1 } })
+                .populate([
+                    {
+                        path: 'user',
+                        select: 'name'
+                    },
+                    {
+                        path: 'episodes',
+                        options: { sort: { number: 1 } }
+                    }
+                ])
+                .populate([
+                    {
+                        path: 'comments',
+                        match: {
+                            parent: null,
+                            approved: true
+                        },
+                        populate: [
+                            {
+                                path: 'user',
+                                select: 'name'
+                            },
+                            {
+                                path: 'comments',
+                                match: {
+                                    approved: true
+                                },
+                                populate: { path: 'user', select: 'name' }
+                            }
+                        ]
+                    }
+                ]);
+            let categories = await Category.find({ parent: null }).populate('childs').exec();
+
+            let courses = await Course.find({ lang: req.getLocale() }).sort({ createdAt: -1 }).limit(3).exec();
+
+            res.render('home/single-course', { course, categories, courses, episode });
+
+        } catch (err) {
+            next(err);
+        }
+
+
     }
 
     checkHash(req, episode) {
+
         let timestamps = new Date().getTime();
         if (req.query.t < timestamps) return false;
 
         let text = `aQTR@!#Fa#%!@%SDQGGASDF${episode.id}${req.query.t}`;
-
         return bcrypt.compareSync(text, req.query.mac);
     }
 

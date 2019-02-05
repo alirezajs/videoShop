@@ -24,61 +24,60 @@
 <div class="container-flut">
     <div class="row">
         <div class="col-12 col-md-12 ">
+            <div class="card bg-secondary  text-white">
+                <div class="card-body">
+                    <h4>فیلتر ها</h4>
+                    <div class="features-list">
+                        <form action="/courses" method="GET">
+                            <div class="row">
+                                <% if(search) { %>
+                                <div class="form-group col-md-12">
+                                    <input type="hidden" name="search" value="<%= search %>">
+                                    <span>عبارت جستجو شده :
+                                        <%= search %> <a href="/courses?<%= type ? 'type=' + type : '' %><%= order ? '&order=1' : '' %>"
+                                            class="btn btn-sm btn-dark">حذف</a></span>
+                                </div>
+                                <% } %>
+
+                                <div class="form-group col-md-3">
+                                    <select name="type" class="form-control">
+                                        <option value="all">همه دوره ها</option>
+                                        <option value="vip" <%=type==='vip' ? 'selected' : '' %> >اعضای ویژه</option>
+                                        <option value="cash" <%=type==='cash' ? 'selected' : '' %> >نقدی</option>
+                                        <option value="free" <%=type==='free' ? 'selected' : '' %> >رایگان</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <select name="category" class="form-control">
+                                        <option value="all">همه دسته ها</option>
+                                        <% categories.forEach(cate => { %>
+                                        <option value="<%= cate.slug %>" <%=cate.slug===category ? 'selected' : '' %> >
+                                            <%= cate.name %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
 
 
-            <div class="sidebar-widget">
-                <h4>فیلتر ها</h4>
-                <div class="features-list">
-                    <form action="/courses" method="GET">
+                                <div class="form-group col-md-2">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="order" value="1" class="ml-2" <%=order==='1' ?
+                                            'checked' : '' %>>از
+                                        اول به
+                                        آخر
+                                    </label>
+                                </div>
 
-                        <% if(search) { %>
-                        <div class="form-group col-md-3">
-                            <input type="hidden" name="search" value="<%= search %>">
-                            <span>عبارت جستجو شده :
-                                <%= search %> <a href="/courses?<%= type ? 'type=' + type : '' %><%= order ? '&order=1' : '' %>"
-                                    class="btn btn-sm btn-dark">حذف</a></span>
-                        </div>
-                        <% } %>
-
-                        <div class="form-group col-md-3">
-                            <select name="type" class="form-control">
-                                <option value="all">همه دوره ها</option>
-                                <option value="vip" <%=type==='vip' ? 'selected' : '' %> >اعضای ویژه</option>
-                                <option value="cash" <%=type==='cash' ? 'selected' : '' %> >نقدی</option>
-                                <option value="free" <%=type==='free' ? 'selected' : '' %> >رایگان</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-3">
-                            <select name="category" class="form-control">
-                                <option value="all">همه دسته ها</option>
-                                <% categories.forEach(cate => { %>
-                                <option value="<%= cate.slug %>" <%=cate.slug===category ? 'selected' : '' %> >
-                                    <%= cate.name %>
-                                </option>
-                                <% }) %>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group col-md-3">
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="order" value="1" class="ml-2" <%=order==='1' ? 'checked' :
-                                    '' %>>از
-                                اول به
-                                آخر
-                            </label>
-                        </div>
-
-                        <div class="form-group col-md-3">
-                            <button class="btn btn-danger" type="submit">فیلتر</button>
-                        </div>
-                    </form>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-danger btn-block" type="submit">فیلتر</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-
-
         <div class="col-12 col-md-12">
             <!-- ##### Popular Course Area Start ##### -->
             <section class="popular-courses-area section-padding-100">

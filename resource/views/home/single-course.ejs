@@ -1,3 +1,77 @@
+<div class="breadcumb-area">
+    <!-- Breadcumb -->
+    <nav aria-label="breadcrumb">
+
+        <ol class="breadcrumb">
+            <li style="margin-left:10px;"><strong>شما اینجا هستید:</strong> </li>
+            <li class="breadcrumb-item"><a href="/">مجله آموزشی باهوش ها</a></li>
+            <li class="breadcrumb-item"><a href="/courses">دوره ها</a></li>
+            <% if(episode && episode.url){ %>
+            <li class="breadcrumb-item">
+                <a href="/course/<%= course.slug  %>">
+                    <%= course.title %>-<%= episode.title %></a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <%= episode.title %>
+            </li>
+            <%} else {%>
+            <li class="breadcrumb-item active" aria-current="page">
+                <%= course.title %>
+            </li>
+
+
+            <%}%>
+        </ol>
+    </nav>
+</div>
+
+<% if(episode && episode.url){ %>
+<div class="card">
+    <div class="card-body text-center">
+        <div class="single-course-intro-content text-center">
+            <!-- Ratings -->
+            <div class="ratings">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+            </div>
+            <h3>
+                <%= course.title %>
+            </h3>
+            <div class="meta d-flex align-items-center justify-content-center">
+                <a href="#">
+                    <%= course.user.name %></a>
+                <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                <a href="#">
+                    <%= date(course.createdAt).format('jD jMMMM jYYYY') %></a>
+            </div>
+            <div class="price">
+                <% if(course.type==='vip') { %>
+                <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
+                <% } else if(course.type=='cash') { %>
+                <a href="<%= course.path() %>">
+                    <%= course.price %>
+                    تومان
+                </a>
+                <% } else { %>
+                <a href="<%= course.path() %>" class="free">رایگان </a>
+                <%} %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<video width="100%" height="500" poster="<%=course.images.original%>" id="player" playsinline controls>
+    <source src="<%=episode.url%>" type="video/mp4">
+    <source src="/path/to/video.webm" type="video/webm">
+
+    <!-- Captions are optional -->
+    <track kind="captions" label="English captions" src="/path/to/captions.vtt" srclang="en" default>
+</video>
+<% } else{ %>
+
 <!-- ##### Single Course Intro Start ##### -->
 <div class="single-course-intro d-flex align-items-center justify-content-center" style='background-image: url("<%= course.images.original %>");'>
     <!-- Content -->
@@ -22,18 +96,21 @@
         </div>
         <div class="price">
             <% if(course.type==='vip') { %>
-            <a href="<%= course.path() %>" class="free">رایگان</a>
+            <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
             <% } else if(course.type=='cash') { %>
             <a href="<%= course.path() %>">
                 <%= course.price %>
                 تومان
             </a>
             <% } else { %>
-            <a href="<%= course.path() %>" class="free">اعضای ویژه</a>
+            <a href="<%= course.path() %>" class="free">رایگان </a>
             <%} %>
         </div>
     </div>
 </div>
+<% } %>
+
+
 <!-- ##### Single Course Intro End ##### -->
 
 <!-- ##### Courses Content Start ##### -->
@@ -261,9 +338,10 @@
                                                             <%= episode.time %>
                                                         </span>
                                                         <span class="col-lg-4">
-                                                            دانلود
+
                                                             <a href="<%= episode.download(req.isAuthenticated() , req.user) %>"><i
-                                                                    class="fa fa-download"></i></a>
+                                                                    class="fa fa-download"></i>
+                                                                دانلود</a>
                                                         </span>
                                                     </li>
 
