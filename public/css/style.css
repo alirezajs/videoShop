@@ -1960,5 +1960,11 @@ textarea:focus {
         text-transform: uppercase; }
       .bottom-footer-area .follow-us a:hover, .bottom-footer-area .follow-us a:focus {
         color: #ffffff; }
-
+        .breadcrumb-item+.breadcrumb-item::before{
+          display: inline-block;
+          padding-left: .5rem;
+          padding-right: 0px;
+          color: #6c757d;
+          content: "/";
+        }
 /*# sourceMappingURL=style.css.map */

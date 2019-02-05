@@ -5,8 +5,9 @@
     <!-- Breadcumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
-            <li class="breadcrumb-item"><a href="#">دوره ها</a></li>
+            <li style="margin-left:10px;"><strong>شما اینجا هستید:</strong> </li>
+            <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+            <li class="breadcrumb-item"><a href="/courses">دوره ها</a></li>
             <li class="breadcrumb-item active" aria-current="page">
                 <%= category && category!=='all' ? category :  'همه دوره ها' %>
             </li>
@@ -88,11 +89,15 @@
                         <!-- Single Popular Course -->
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
-                                <img src="<%= course.thumb %>" alt="<%= course.title %>">
+                                <a href="<%= course.path() %> ">
+                                    <img src="<%= course.thumb %>" alt="<%= course.title %>">
+                                </a>
                                 <!-- Course Content -->
                                 <div class="course-content">
                                     <h4>
-                                        <%= course.title %>
+                                        <a href="<%= course.path() %> ">
+                                            <%= course.title %>
+                                        </a>
                                     </h4>
                                     <div class="meta d-flex align-items-center">
                                         <a href="#">Sarah Parker</a>
