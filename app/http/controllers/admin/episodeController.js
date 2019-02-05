@@ -9,7 +9,7 @@ class episodeController extends controller {
     async index(req , res,next) {
         try {
             let page = req.query.page || 1;
-            let episodes = await Episode.paginate({} , { page , sort : { createdAt : 1 } , limit : 2 });
+            let episodes = await Episode.paginate({} , { page , sort : { createdAt : 1 } , limit : 20 });
             res.render('admin/episodes/index',  { title : 'ویدیو ها' , episodes });
         } catch (err) {
             next(err);

@@ -3,10 +3,10 @@ const Permission = require('app/models/permission');
 
 let gate = new ConnectRoles({
   failureHandler: function (req, res, action) {
+   
     // optional function to customise code that runs when
     // user fails authorisation
     var accept = req.headers.accept || '';
-
     res.locals.layout="errors/master";
     
     res.status(403);
@@ -26,9 +26,12 @@ const permissions = async () => {
 
 permissions()
     .then(permissions => {
+  
+
         permissions.forEach(permission => {
             let roles = permission.roles.map(item => item._id);
             gate.use(permission.name , (req) => {
+
                 return (req.isAuthenticated())
                         ? req.user.hasRole(roles)
                         : false;
