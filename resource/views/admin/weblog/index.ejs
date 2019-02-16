@@ -1,8 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
-        <h2>دوره ها</h2>
+        <h2> وبلاگ</h2>
         <div class="btn-group">
-            <a href="/admin/courses/create" class="btn btn-sm btn-primary">ایجاد دوره جدید</a>
-            <a href="/admin/episodes" class="btn btn-sm btn-danger">بخش ویدیوها</a>
+            <a href="/admin/weblog/create" class="btn btn-sm btn-primary"> پست جدید</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -12,23 +11,20 @@
                 <th>عنوان دوره</th>
                 <th>تعداد نظرات</th>
                 <th>مقدار بازدید</th>
-                <th>وضعیت دوره</th>
                 <th>تنظیمات</th>
             </tr>
             </thead>
             <tbody>
-                <% courses.docs.forEach(course => { %> 
+                <% weblogs.docs.forEach(blog => { %> 
                     <tr>
-                        <td><a href="/courses/آپدیت-جدید-راکت"><%= course.title %></a></td>
-                        <td><%= course.commentCount %></td>
-                        <td><%= course.viewCount %></td>
+                        <td><a><%= blog.title %></a></td>
+                        <td><%= blog.commentCount %></td>
+                        <td><%= blog.viewCount %></td>
+                       
                         <td>
-                            <%= course.typeToPersian() %>
-                        </td>
-                        <td>
-                            <form action="/admin/courses/<%= course._id %>?_method=DELETE" method="post">
+                            <form action="/admin/weblog/<%= blog._id %>?_method=DELETE" method="post">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="/admin/courses/<%= course._id %>/edit"  class="btn btn-primary">ویرایش</a>
+                                    <a href="/admin/weblog/<%= blog._id %>/edit"  class="btn btn-primary">ویرایش</a>
                                     <button type="submit" class="btn btn-danger">حذف</button>
                                 </div>
                             </form>
@@ -38,7 +34,7 @@
             </tbody>
         </table>
 
-        <%- include(viewPath('layouts/pagination') ,{ pagination : courses}) %>
+        <%- include(viewPath('layouts/pagination') ,{ pagination : weblogs}) %>
     </div>
     
     
