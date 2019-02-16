@@ -16,6 +16,21 @@ class homeController extends controller {
     async about(req, res) {
         res.render('home/about');
     }
+
+    async contact(req,res,next){
+        res.render('home/contact');
+
+    }
+    async joinUs(req,res,next){
+        res.render('home/joinUs');
+
+    }
+    async FAQs(req,res,next){
+        res.render('home/faq');
+
+    }
+
+
     async comment(req, res, next) {
         try {
 

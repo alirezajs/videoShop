@@ -17,12 +17,18 @@ const redirectIfNotAuthenticated = require('app/http/middleware/redirectIfNotAut
 router.get('/', homeController.index);
 
 router.get('/about-me', homeController.about);
+router.get('/contact', homeController.contact);
+router.get('/join-us', homeController.joinUs);
+router.get("faqs", homeController.FAQs)
+
+
+
+
 router.get('/courses', courseController.index);
 router.get('/courses/:course', courseController.single);
 router.get('/courses/:course/episode/:episode', courseController.episode);
 router.get('/download/:episode', courseController.download);
 router.post('/courses/payment', courseController.payment);
-
 router.post("/comment", redirectIfNotAuthenticated.handle, commentValidator.handle(), homeController.comment);
 router.get('/courses/payment/checker', redirectIfNotAuthenticated.handle, courseController.checker);
 
@@ -39,9 +45,9 @@ router.get('/user/panel/vip', userController.vip)
 router.post('/user/panel/vip/payment', userController.vipPayment);
 router.get('/user/panel/vip/payment/check', userController.vipPaymentCheck);
 
-router.get('/sitemap.xml' , homeController.sitemap);
-router.get('/feed/courses' , homeController.feedCourses);
-router.get('/feed/episodes' , homeController.feedEpisodes);
+router.get('/sitemap.xml', homeController.sitemap);
+router.get('/feed/courses', homeController.feedCourses);
+router.get('/feed/episodes', homeController.feedEpisodes);
 
 
 

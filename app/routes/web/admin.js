@@ -4,6 +4,8 @@ const router = express.Router();
 // Controllers
 const adminController = require('app/http/controllers/admin/adminController');
 const courseController = require('app/http/controllers/admin/courseController');
+const weblogController = require('app/http/controllers/admin/weblogController');
+
 const episodeController = require('app/http/controllers/admin/episodeController');
 const commentController = require('app/http/controllers/admin/commentController');
 const categoryController = require('app/http/controllers/admin/categoryController');
@@ -13,6 +15,7 @@ const roleController = require('app/http/controllers/admin/roleController');
 
 // validators 
 const courseValidator = require('app/http/validators/courseValidator');
+const weblogValidator = require('app/http/validators/weblogValidator');
 const episodeValidator = require('app/http/validators/episodeValidator');
 const categoryValidator = require('app/http/validators/categoryValidator');
 const registerValidator = require('app/http/validators/registerValidator');
@@ -51,6 +54,25 @@ router.put('/courses/:id',
     courseController.update
 );
 router.delete('/courses/:id', courseController.destroy);
+
+
+//weblog 
+router.get('/weblog', weblogController.index);
+router.get('/weblog/create', weblogController.create);
+router.post('/weblog/create',
+    upload.single('images'),
+    convertFileToField.handle,
+    weblogValidator.handle(),
+    weblogController.store
+);
+router.get('/weblog/:id/edit', weblogController.edit);
+router.put('/weblog/:id',
+    upload.single('images'),
+    convertFileToField.handle,
+    weblogValidator.handle(),
+    weblogController.update
+);
+router.delete('/weblog/:id', weblogController.destroy);
 
 
 router.get('/users', userController.index);
