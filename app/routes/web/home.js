@@ -5,7 +5,7 @@ const router = express.Router();
 const homeController = require('app/http/controllers/homeController');
 const courseController = require('app/http/controllers/courseController');
 const userController = require('app/http/controllers/userController');
-
+const weblogCongroller=require('app/http/controllers/weblogCongroller')
 
 // validators 
 const commentValidator = require('app/http/validators/commentValidator');
@@ -48,6 +48,10 @@ router.get('/user/panel/vip/payment/check', userController.vipPaymentCheck);
 router.get('/sitemap.xml', homeController.sitemap);
 router.get('/feed/courses', homeController.feedCourses);
 router.get('/feed/episodes', homeController.feedEpisodes);
+
+
+router.get('/weblog', weblogCongroller.index)
+router.get('/weblog/:weblog', weblogCongroller.single)
 
 
 
