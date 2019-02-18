@@ -92,12 +92,13 @@
 
                             <!-- Register / Login -->
                             <div class="register-login-area">
-                                <% if(req.getLocale()=='fa'){ %>
+                                <!-- <% if(req.getLocale()=='fa'){ %>
                                 <a href="/lang/en" class="btn">زبان انگلیسی</a>
                                 <% } else if(req.getLocale()=='en'){ %>
                                 <a href="/lang/fa" class="btn">زبان فارسی</a>
-                                <% }  %>
+                                <% }  %> -->
                                 <% if(auth.check) { %>
+                                <a href="/admin" class="btn">داشبورد مدیریتی</a>
                                 <a href="/user/panel" class="btn">پنل کاربری</a>
                                 <a href="/logout" class="btn active">خروج</a>
                                 <% } else { %>
@@ -133,7 +134,8 @@
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                                 Copyright &copy;
                                 <script>document.write(new Date().getFullYear());</script> تمامی حقوق وب سایت محفوظ است
-                                و توسط <i class="fa fa-heart-o" aria-hidden="true"></i> <a href="" target="_blank">علیرضا
+                                و توسط <i class="fa fa-heart-o" aria-hidden="true"></i> <a href=""
+                                    target="_blank">علیرضا
                                     ورمقانی</a> طراحی شده است
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </p>

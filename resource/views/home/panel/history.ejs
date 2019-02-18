@@ -1,27 +1,34 @@
 <%- include(viewPath('home/panel/head')) -%>
 
+<div class="regular-page-area section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>مقدار پرداخت</th>
+                                <th>بابت</th>
+                                <th>وضعیت پرداخت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-<div style="margin: 20px;">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>مقدار پرداخت</th>
-                <th>بابت</th>
-                <th>وضعیت پرداخت</th>
-        </tr></thead>
-        <tbody>
-            
-            <% payments.docs.forEach(payment => { %> 
-                <tr>
-                    <td><%= payment.price %> تومان</td>
-                    <td><%= payment.vip ? ' خریداری عضویت ویژه' : `خرید دوره ${payment.course.title}` %></td>
-                    <td><%= payment.payment ? 'موفق' : 'ناموفق' %></td>
-                </tr>
-            <% }) %>
+                            <% payments.docs.forEach(payment => { %>
+                            <tr>
+                                <td><%= payment.price %> تومان</td>
+                                <td><%= payment.vip ? ' خریداری عضویت ویژه' : `خرید دوره ${payment.course.title}` %>
+                                </td>
+                                <td><%= payment.payment ? 'موفق' : 'ناموفق' %></td>
+                            </tr>
+                            <% }) %>
 
-        </tbody>
-    </table>
+                        </tbody>
+                    </table>
 
-    <%- include(viewPath('layouts/pagination') ,{ pagination : payments}) %>
+                    <%- include(viewPath('layouts/pagination') ,{ pagination : payments}) %>
 
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,11 +1,18 @@
 <%- include(viewPath('home/panel/head')) -%>
-
-<ul style="margin: 20px">
-    <li><b>نام کاربری</b> :<%= auth.user.name %></li>
-    <li><b>ایمیل کاربری</b> : <%= auth.user.email %></li>
-    <% if(auth.user.isVip()) { %>
-        <li> <b>زمان پایان اعتبار ویژه</b> : <%= date(auth.user.vipTime).fromNow() %> آینده</li>
-    <% } else { %>
-        <li> <b>زمان عضویت ویژه شما به پایان رسیده است</li>
-    <% } %>
-</ul>
+<div class="regular-page-area section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul>
+                    <li><b>نام کاربری</b> :<%= auth.user.name %></li>
+                    <li><b>ایمیل کاربری</b> : <%= auth.user.email %></li>
+                    <% if(auth.user.isVip()) { %>
+                    <li> <b>زمان پایان اعتبار ویژه</b> : <%= date(auth.user.vipTime).fromNow() %> آینده</li>
+                    <% } else { %>
+                    <li> <b>زمان عضویت ویژه شما به پایان رسیده است</li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
