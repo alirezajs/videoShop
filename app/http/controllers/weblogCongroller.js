@@ -24,18 +24,18 @@ class weblogCongroller extends controller {
                 query.categories = { $in: [category.id] }
         }
 
-        let courses = Weblog.find({ ...query });
+        let wblog = Weblog.find({ ...query });
 
 
         if (req.query.order)
-            courses.sort({ createdAt: 1 })
+            wblog.sort({ createdAt: 1 })
         else
-            courses.sort({ createdAt: -1 })
+            wblog.sort({ createdAt: -1 })
 
-        courses = await courses.exec();
+        wblog = await wblog.exec();
 
         let categories = await Category.find({});
-        res.render('home/weblog', { courses, categories });
+        res.render('home/weblog', { weblog: wblog, categories });
     }
    
 

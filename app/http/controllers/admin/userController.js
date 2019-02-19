@@ -47,9 +47,11 @@ class userController extends controller {
 
             let user = await User.findById(req.params.id);
             if (!user) this.error('چنین کاربری وجود ندارد', 404);
-
-            user.set({ roles: req.body.roles });
-            await user.save();
+            await user.update({
+                $set: {
+                    roles: req.body.roles
+                }
+            });
 
             res.redirect('/admin/users');
         } catch (err) {
