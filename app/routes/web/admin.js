@@ -38,7 +38,7 @@ router.use((req, res, next) => {
 router.get('/', adminController.index);
 
 // Course Routes
-router.get('/courses', gate.can('show-courses'), courseController.index);
+router.get('/courses', courseController.index);
 router.get('/courses/create', courseController.create);
 router.post('/courses/create',
     upload.single('images'),
@@ -117,9 +117,9 @@ router.get('/categories/:id/edit', categoryController.edit);
 router.put('/categories/:id', categoryValidator.handle(), categoryController.update);
 router.delete('/categories/:id', categoryController.destroy);
 
-router.get('/comments/approved', gate.can('show-approved-comments'), commentController.approved);
-router.get('/comments', gate.can('show-comments'), commentController.index);
-router.put('/comments/:id/approved', gate.can('approved-comments'), commentController.update);
+router.get('/comments/approved',  commentController.approved);
+router.get('/comments',  commentController.index);
+router.put('/comments/:id/approved',  commentController.update);
 router.delete('/comments/:id', commentController.destroy);
 
 router.post('/upload-image', upload.single('upload'), adminController.uploadImage);

@@ -62,9 +62,9 @@ class courseController extends controller {
             let course = await Course.findById(req.params.id);
             if (!course) this.error('چنین دوره ای وجود ندارد', 404);
             req.courseUserId = course.user;
-            if (!req.userCan('edit-courses')) {
-                this.error("شما اجازه دسترسی به این صفحه را ندارید", 403)
-            }
+            // if (!req.userCan('edit-courses')) {
+            //     this.error("شما اجازه دسترسی به این صفحه را ندارید", 403)
+            // }
 
             let categories = await Category.find({});
             return res.render('admin/courses/edit', { course, categories });
