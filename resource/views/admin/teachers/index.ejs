@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>مدرس های وب سایت</h2>
+    <div class="btn-group">
+        <a href="/admin/teachers/create" class="btn btn-sm btn-primary">ایجاد مدرس جدید</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>عنوان دوره</th>
+                <th>تعداد نظرات</th>
+                <th>مقدار بازدید</th>
+                <th>تنظیمات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% teachers.docs.forEach(teacher => { %>
+            <tr>
+                <td><a><%= teacher.fullName %></a></td>
+                <td><%= teacher.commentCount %></td>
+                <td><%= teacher.viewCount %></td>
+               
+                <td>
+                    <form action="/admin/teachears/<%= teacher._id %>?_method=DELETE" method="post">
+                        <div class="btn-group btn-group-sm">
+                            <a href="/admin/teachers/<%= teacher._id %>/edit" class="btn btn-primary">ویرایش</a>
+                            <button type="submit" class="btn btn-danger">حذف</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <%- include(viewPath('layouts/pagination') ,{ pagination : teachers}) %>
+</div>

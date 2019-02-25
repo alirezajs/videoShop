@@ -5,6 +5,7 @@ const router = express.Router();
 const adminController = require('app/http/controllers/admin/adminController');
 const courseController = require('app/http/controllers/admin/courseController');
 const weblogController = require('app/http/controllers/admin/weblogController');
+const teacherController = require('app/http/controllers/admin/teacherController');
 
 const episodeController = require('app/http/controllers/admin/episodeController');
 const commentController = require('app/http/controllers/admin/commentController');
@@ -15,6 +16,8 @@ const roleController = require('app/http/controllers/admin/roleController');
 
 // validators 
 const courseValidator = require('app/http/validators/courseValidator');
+const teacherValidator = require('app/http/validators/teacherValidator');
+
 const weblogValidator = require('app/http/validators/weblogValidator');
 const episodeValidator = require('app/http/validators/episodeValidator');
 const categoryValidator = require('app/http/validators/categoryValidator');
@@ -54,6 +57,25 @@ router.put('/courses/:id',
     courseController.update
 );
 router.delete('/courses/:id', courseController.destroy);
+
+
+// teacher Routes
+router.get('/teachers', teacherController.index);
+router.get('/teachers/create', teacherController.create);
+router.post('/teachers/create',
+    upload.single('images'),
+    convertFileToField.handle,
+    teacherValidator.handle(),
+    teacherController.store
+);
+router.get('/teachers/:id/edit', teacherController.edit);
+router.put('/teachers/:id',
+    upload.single('images'),
+    convertFileToField.handle,
+    teacherValidator.handle(),
+    teacherController.update
+);
+router.delete('/teachears/:id', teacherController.destroy);
 
 
 //weblog 

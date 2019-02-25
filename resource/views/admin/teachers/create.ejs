@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+    <h2>ایجاد مدرس</h2>
+</div>
+<form class="form-horizontal" action="/admin/teachers/create" method="post" enctype="multipart/form-data">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="fullName" class="control-label font-weight-bold">نام و نام خانوادگی</label>
+            <input type="text" class="form-control" name="fullName" id="fullName" placeholder="عنوان را وارد کنید"
+                value="<%= old('fullName') %>">
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="expertise" class="control-label font-weight-bold">تخصص مدرس</label>
+            <input type="text" class="form-control" name="expertise" id="expertise" placeholder="عنوان را وارد کنید"
+                value="<%= old('expertise') %>">
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="body" class="control-label font-weight-bold">درباره مدرس</label>
+            <textarea rows="10" class="form-control" name="body" id="body"
+                placeholder="متن مقاله را وارد کنید"><%= old('body') %></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col">
+            <label for="images" class="control-label font-weight-bold">تصویر استاد</label>
+            <input type="file" class="form-control" name="images" id="images" placeholder="تصویر مقاله را وارد کنید">
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col">
+            <label for="tags" class="control-label font-weight-bold">تگ ها</label>
+            <input type="text" class="form-control" name="tags" id="tags" placeholder="تگ ها را وارد کنید"
+                value="<%= old('tags') %>">
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col">
+            <label for="facebook" class="control-label font-weight-bold">فیس بوک</label>
+            <input type="text" class="form-control" name="facebook" id="facehbook" placeholder="فیس بوک را وارد کنید"
+                value="<%= old('facebook') %>">
+        </div>
+        <div class="col">
+            <label for="instagram" class="control-label font-weight-bold"> اینستاگرام</label>
+            <input type="text" class="form-control" name="instagram" id="tainstagramgs" placeholder="ایستاگرام را وارد کنید"
+                value="<%= old('instagram') %>">
+        </div>
+        <div class="col">
+            <label for="email" class="control-label font-weight-bold">ایمیل</label>
+            <input type="text" class="form-control" name="email" id="email" placeholder="ایمیل را وارد کنید"
+                value="<%= old('email') %>">
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col">
+            <label><input <%=old('showInMain') ? 'checked' : '' %> type="checkbox" name="showInMain">آیا میخواهید نام
+                استاد در صفحه اصلی نمایش داده شود</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">ارسال</button>
+        </div>
+    </div>
+</form>
+
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.jquery.min.js"></script>
+<script>
+    CKEDITOR.replace('body', {
+        filebrowserUploadUrl: '/admin/upload-image'
+    })
+
+    $('.form-control-chosen').chosen({});
+</script>
