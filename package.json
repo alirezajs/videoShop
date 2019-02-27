@@ -13,6 +13,7 @@
     "auto-bind": "^1.2.0",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
+    "compression": "^1.7.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^2.0.1",
     "connect-roles": "^3.1.2",

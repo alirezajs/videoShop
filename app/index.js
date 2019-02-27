@@ -13,6 +13,7 @@ const methodOverride = require('method-override');
 const gate = require('app/helpers/gate');
 const i18n = require("i18n");
 const rememberLogin = require('app/http/middleware/rememberLogin');
+var compression = require('compression')
 
 module.exports = class Application {
     constructor() {
@@ -74,6 +75,9 @@ module.exports = class Application {
             app.locals = new Helpers(req, res).getObjects();
             next();
         });
+
+        app.use(compression())
+
     }
 
     setRouters() {
