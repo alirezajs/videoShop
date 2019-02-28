@@ -201,13 +201,12 @@ class courseController extends controller {
                     ]
                 }
             ])
-            .populate(["teacher"])
+            .populate(["teachers"])
 
         let categories = await Category.find({ parent: null }).populate('childs').exec();
 
         let courses = await Course.find({ lang: req.getLocale() }).sort({ createdAt: -1 }).limit(3).exec();
         let episode = {};
-        console.log(course)
         res.render('home/single-course', { course, categories, courses, episode });
     }
 
