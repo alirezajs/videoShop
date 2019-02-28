@@ -1,5 +1,6 @@
 const controller = require('app/http/controllers/controller');
 const Course = require('app/models/course');
+const Teacher = require('app/models/teacher');
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
@@ -18,7 +19,9 @@ class courseController extends controller {
 
     async create(req, res) {
         let categories = await Category.find({});
-        res.render('admin/courses/create', { categories });
+        let teachers = await Teacher.find({});
+
+        res.render('admin/courses/create', { categories, teachers });
     }
 
     async store(req, res, next) {
@@ -32,7 +35,7 @@ class courseController extends controller {
 
             // create course
             let images = this.imageResize(req.file);
-            let { title, body, type, price, tags,lang } = req.body;
+            let { title, body, type, price, tags, lang } = req.body;
 
             let newCourse = new Course({
                 user: req.user._id,
@@ -67,7 +70,8 @@ class courseController extends controller {
             // }
 
             let categories = await Category.find({});
-            return res.render('admin/courses/edit', { course, categories });
+            let teachers = await Teacher.find({});
+            return res.render('admin/courses/edit', { course, categories, teachers });
         } catch (err) {
             next(err);
         }

@@ -32,6 +32,11 @@ teacherSchema.methods.inc = async function (field, num = 1) {
 }
 
 
+teacherSchema.virtual('teachers', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'teachers'
+});
 teacherSchema.virtual('comments', {
     ref: 'Comment',
     localField: '_id',

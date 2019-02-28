@@ -2,6 +2,7 @@ const controller = require('app/http/controllers/controller');
 const Course = require("../../models/course");
 const Episode = require("../../models/episode");
 const Comment = require("../../models/comment");
+const Teacher = require("../../models/teacher");
 const sm = require('sitemap');
 const rss = require('rss');
 const striptags = require('striptags');
@@ -9,23 +10,25 @@ const striptags = require('striptags');
 class homeController extends controller {
 
     async index(req, res) {
-        let courses = await Course.find({lang:req.getLocale()}).sort({ createdAt: -1 }).limit(6).exec();
-        res.render('home/index', { courses });
+        let courses = await Course.find({ lang: req.getLocale() }).sort({ createdAt: -1 }).limit(6).exec();
+        let teachers = await Teacher.find({ showInMain: true }).sort({ createdAt: -1 }).limit(10).exec();;
+        console.log(teachers);
+        res.render('home/index', { courses, teachers });
     }
 
     async about(req, res) {
         res.render('home/about');
     }
 
-    async contact(req,res,next){
+    async contact(req, res, next) {
         res.render('home/contact');
 
     }
-    async joinUs(req,res,next){
+    async joinUs(req, res, next) {
         res.render('home/joinUs');
 
     }
-    async FAQs(req,res,next){
+    async FAQs(req, res, next) {
         res.render('home/faq');
 
     }
@@ -58,28 +61,28 @@ class homeController extends controller {
 
     }
 
-    async sitemap(req , res , next) {
+    async sitemap(req, res, next) {
         try {
             let sitemap = sm.createSitemap({
-                hostname : config.siteurl,
+                hostname: config.siteurl,
                 // cacheTime : 600000
             });
 
-            sitemap.add({ url : '/' , changefreq : 'daily' ,priority : 1 });
-            sitemap.add({ url : '/courses' , priority : 1});
+            sitemap.add({ url: '/', changefreq: 'daily', priority: 1 });
+            sitemap.add({ url: '/courses', priority: 1 });
 
 
-            let courses = await Course.find({ }).sort({ createdAt : -1 }).exec();
+            let courses = await Course.find({}).sort({ createdAt: -1 }).exec();
             courses.forEach(course => {
-                sitemap.add({ url : course.path() , changefreq : 'weekly' , priority : 0.8 })
+                sitemap.add({ url: course.path(), changefreq: 'weekly', priority: 0.8 })
             })
 
-            let episodes = await Episode.find({ }).populate('course').sort({ createdAt : -1 }).exec();
+            let episodes = await Episode.find({}).populate('course').sort({ createdAt: -1 }).exec();
             episodes.forEach(episode => {
-                sitemap.add({ url : episode.path() , changefreq : 'weekly' , priority : 0.8 })
+                sitemap.add({ url: episode.path(), changefreq: 'weekly', priority: 0.8 })
             })
 
-            res.header('Content-type' , 'application/xml');
+            res.header('Content-type', 'application/xml');
             res.send(sitemap.toString());
 
         } catch (err) {
@@ -87,27 +90,27 @@ class homeController extends controller {
         }
     }
 
-    async feedCourses(req , res , next) {
+    async feedCourses(req, res, next) {
         try {
             let feed = new rss({
-                title : 'فید خوان دوره های باهوش ها',
-                description : 'جدیدترین دوره ها را از طریق rss بخوانید',
-                feed_url : `${config.siteurl}/feed/courses`,
-                site_url : config.site_url,
+                title: 'فید خوان دوره های باهوش ها',
+                description: 'جدیدترین دوره ها را از طریق rss بخوانید',
+                feed_url: `${config.siteurl}/feed/courses`,
+                site_url: config.site_url,
             });
 
-            let courses = await Course.find({ }).populate('user').sort({ createdAt : -1 }).exec();
+            let courses = await Course.find({}).populate('user').sort({ createdAt: -1 }).exec();
             courses.forEach(course => {
                 feed.item({
-                    title : course.title,
-                    description : striptags(course.body.substr(0,100)),
-                    date : course.createdAt,
-                    url : course.path(),
-                    author : course.user.name
+                    title: course.title,
+                    description: striptags(course.body.substr(0, 100)),
+                    date: course.createdAt,
+                    url: course.path(),
+                    author: course.user.name
                 })
             })
 
-            res.header('Content-type' , 'application/xml');
+            res.header('Content-type', 'application/xml');
             res.send(feed.xml());
 
         } catch (err) {
@@ -115,27 +118,27 @@ class homeController extends controller {
         }
     }
 
-    async feedEpisodes(req , res , next) {
+    async feedEpisodes(req, res, next) {
         try {
             let feed = new rss({
-                title : 'فید خوان جلسات دوره های های باهوش ها',
-                description : 'جدیدترین دوره ها را از طریق rss بخوانید',
-                feed_url : `${config.siteurl}/feed/courses`,
-                site_url : config.site_url,
+                title: 'فید خوان جلسات دوره های های باهوش ها',
+                description: 'جدیدترین دوره ها را از طریق rss بخوانید',
+                feed_url: `${config.siteurl}/feed/courses`,
+                site_url: config.site_url,
             });
 
-            let episodes = await Episode.find({ }).populate({ path :'course' , populate : 'user'}).sort({ createdAt : -1 }).exec();
+            let episodes = await Episode.find({}).populate({ path: 'course', populate: 'user' }).sort({ createdAt: -1 }).exec();
             episodes.forEach(episode => {
                 feed.item({
-                    title : episode.title,
-                    description : striptags(episode.body.substr(0,100)),
-                    date : episode.createdAt,
-                    url : episode.path(),
-                    author : episode.course.user.name
+                    title: episode.title,
+                    description: striptags(episode.body.substr(0, 100)),
+                    date: episode.createdAt,
+                    url: episode.path(),
+                    author: episode.course.user.name
                 })
             })
 
-            res.header('Content-type' , 'application/xml');
+            res.header('Content-type', 'application/xml');
             res.send(feed.xml());
         } catch (err) {
             next(err);
