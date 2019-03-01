@@ -12,7 +12,7 @@ class homeController extends controller {
     async index(req, res) {
         let courses = await Course.find({ lang: req.getLocale() }).sort({ createdAt: -1 }).limit(6).exec();
         let teachers = await Teacher.find({ showInMain: true }).sort({ createdAt: -1 }).limit(10).exec();;
-        console.log(teachers);
+        
         res.render('home/index', { courses, teachers });
     }
 

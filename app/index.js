@@ -13,7 +13,10 @@ const methodOverride = require('method-override');
 const gate = require('app/helpers/gate');
 const i18n = require("i18n");
 const rememberLogin = require('app/http/middleware/rememberLogin');
-var compression = require('compression')
+const compression = require('compression')
+// const swagger = require("swagger-node-express");
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('../swagger.json');
 
 module.exports = class Application {
     constructor() {
@@ -63,10 +66,10 @@ module.exports = class Application {
         app.use(rememberLogin.handle);
         app.use(gate.middleware());
         i18n.configure({
-            locales:['en', 'fa'],
-            directory: config.layout.locales_directory ,
-            defaultLocale : 'fa',
-            cookie : 'lang',
+            locales: ['en', 'fa'],
+            directory: config.layout.locales_directory,
+            defaultLocale: 'fa',
+            cookie: 'lang',
             objectNotation: true,
         });
         app.use(i18n.init);
@@ -77,6 +80,10 @@ module.exports = class Application {
         });
 
         app.use(compression())
+
+        // Couple the application to the Swagger module.
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        // app.use('/api/v1', router);
 
     }
 

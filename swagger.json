@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "this is a document for VideoShop, there are all Api which you need for your applications",
+        "version": "1.0.0",
+        "title": "Video Shop Document"
+    },
+    "host": "95.156.255.148:3000",
+    "basePath": "/api/v1",
+    "tags": [
+        {
+            "name": "user",
+            "description": "Operations about user",
+            "externalDocs": {}
+        },
+        {
+            "name": "coures",
+            "description": "Operations about course",
+            "externalDocs": {}
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/courses": {
+            "get": {
+                "tags": [
+                    "course"
+                ],
+                "summary": "Finds Courses by anyting",
+                "description": "get all courses by anything you want such as which category? which page?",
+                "operationId": "getAllCourses",
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "slug for catreturn",
+                        "required": false,
+                        "type": "string",
+                        "example": "5c4c8a23a810313a10ee86f3"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}": {
+            "get": {
+                "tags": [
+                    "course"
+                ],
+                "summary": "get detials of a course",
+                "description": "get detials of a course which send it's id in query parameter",
+                "operationId": "getSingleCourse",
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "description": "courseId to return what exactlly course do you want",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "api_token",
+                        "in": "query",
+                        "description": "api token",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "reguster",
+                "description": "",
+                "operationId": "register",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "all parameter which you need for login",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Register"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "logs into system",
+                "description": "",
+                "operationId": "login",
+                "consumes": [
+                    "application/json",
+                    "charset=utf-8"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "all parameter which you need for login",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Login"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "get user info",
+                "description": "",
+                "operationId": "getUserInfo",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "api_token",
+                        "in": "query",
+                        "description": "api token",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/history": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "get user history",
+                "description": "",
+                "operationId": "getUserHistory",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "api_token",
+                        "in": "query",
+                        "description": "api token",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "Login": {
+            "type": "object",
+            "required": [
+                "name",
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "alireza.varmaghani@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456789"
+                }
+            }
+        },
+        "Register": {
+            "type": "object",
+            "required": [
+                "name",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "alireza.varmaghani@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456789"
+                }
+            }
+        }
+    }
+}
