@@ -1,6 +1,8 @@
 const controller = require('app/http/controllers/api/controller');
 const Course = require('app/models/course');
 const Episode = require('app/models/episode');
+const Category = require('app/models/category');
+
 const Comment = require('app/models/comment');
 const passport = require('passport');
 
@@ -8,8 +10,25 @@ class courseController extends controller {
 
     async courses(req, res, next) {
         try {
-            let page = req.query.page || 1;
-            let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 12, populate: [{ path: 'categories' }, { path: 'user' }] });
+            let { search, type, category, page, pagesize } = req.query;
+            let query = {};
+
+            if (search)
+                query.title = new RegExp(search, 'gi');
+
+            if (type && type != 'all')
+                query.type = type;
+
+            if (category && category != 'all') {
+                category = await Category.findOne({ slug: category });
+                if (category)
+                    query.categories = { $in: [category.id] }
+            }
+
+
+            let pageNumber = page || 1;
+            let perPage = Number(pagesize) || 12;
+            let courses = await Course.paginate({ ...query }, { pageNumber, sort: { createdAt: 1 }, limit: perPage, populate: [{ path: 'categories' }, { path: 'user' }] });
 
             res.json({
                 data: this.filterCoursesData(courses),
@@ -27,6 +46,7 @@ class courseController extends controller {
             docs: courses.docs.map(course => {
                 return {
                     id: course.id,
+                    type: course.type,
                     title: course.title,
                     slug: course.slug,
                     body: course.body,

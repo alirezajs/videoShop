@@ -23,6 +23,23 @@
         "http"
     ],
     "paths": {
+        "/categories": {
+            "get": {
+                "tags": [
+                    "course"
+                ],
+                "summary": "Finds categories",
+                "description": "get all categories",
+                "operationId": "getAllCategory",
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                   
+                ],
+                "responses": {}
+            }
+        },
         "/courses": {
             "get": {
                 "tags": [
@@ -36,12 +53,39 @@
                 ],
                 "parameters": [
                     {
-                        "name": "slug",
-                        "in": "path",
-                        "description": "slug for catreturn",
+                        "name": "category",
+                        "in": "query",
+                        "description": "category",
                         "required": false,
-                        "type": "string",
-                        "example": "5c4c8a23a810313a10ee86f3"
+                        "type": "string"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "pagesize",
+                        "in": "query",
+                        "description": "page size",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "type: cash/free/vip",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {}
