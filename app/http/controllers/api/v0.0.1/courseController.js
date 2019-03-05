@@ -62,7 +62,11 @@ class courseController extends controller {
                         name: course.user.name
                     },
                     price: course.price,
-                    createdAt: course.createdAt
+                    createdAt: course.createdAt,
+                    viewCount: course.viewCount,
+                    commentCount: course.commentCount,
+                    time: course.time
+
                 }
             })
         }
@@ -83,7 +87,11 @@ class courseController extends controller {
                     {
                         path: 'categories',
                         select: 'name slug'
-                    }
+                    },
+                    {
+                        path: 'teachers',
+                        select: 'fullName expertise'
+                    },
                 ]);
 
             if (!course) return this.failed('چنین دوره ای یافت نشد', res, 404);
@@ -135,8 +143,19 @@ class courseController extends controller {
                     download: episode.download(!!user, user)
                 }
             }),
+            teachers: course.teachers.map(teacher => {
+                return {
+                    fullName: teacher.fullName,
+                    expertise: teacher.expertise
+                }
+            }),
             price: course.price,
-            createdAt: course.createdAt
+            createdAt: course.createdAt,
+            type: course.type,
+            viewCount: course.viewCount,
+            commentCount: course.commentCount,
+            time: course.time
+
         }
     }
 
