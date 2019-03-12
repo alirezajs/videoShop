@@ -39,6 +39,9 @@ router.use((req, res, next) => {
 
 // Admin Routes
 router.get('/', adminController.index);
+// router.get('/setting', adminController.setting);
+// router.post('/setting/details', adminController.details);
+
 
 // Course Routes
 router.get('/courses', courseController.index);
@@ -125,6 +128,8 @@ router.delete('/users/roles/:id', roleController.destroy);
 
 // Episode Routes
 router.get('/episodes', episodeController.index);
+router.get('/episodes/:course', episodeController.episodCourse);
+
 router.get('/episodes/create', episodeController.create);
 router.post('/episodes/create', episodeValidator.handle(), episodeController.store);
 router.get('/episodes/:id/edit', episodeController.edit);

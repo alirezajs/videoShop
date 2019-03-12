@@ -212,19 +212,26 @@ class courseController extends controller {
 
     async download(req, res, next) {
         try {
+
             this.isMongoId(req.params.episode);
 
             let episode = await Episode.findById(req.params.episode);
+
             if (!episode) this.error('چنین فایلی برای این جلسه وجود ندارد', 404);
 
             if (!this.checkHash(req, episode)) this.error('اعتبار لینک شما به پایان رسیده است', 403);
-            let filePath = path.resolve(episode.videoUrl);
-            // let filePath = path.resolve(`./public/download/ASGLKET!1241tgsdq415215/${episode.videoUrl}`);
+
+            let filePath = path.resolve(`./public/download/ASGLKET!1241tgsdq415215/${episode.videoUrl}`);
+
             if (!fs.existsSync(filePath)) this.error('چنین فایل برای دانلود وجود دارد', 404);
 
             await episode.inc('downloadCount');
+            // res.setHeader('Content-disposition', 'attachment; filename=' + "episode.mp4");
+            // res.setHeader('Content-type', mimetype);
 
-            return res.download(filePath)
+            // var filestream = fs.createReadStream(filePath);
+            // filestream.pipe(res);
+             res.download(filePath)
 
         } catch (err) {
             next(err);
