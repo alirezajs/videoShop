@@ -221,7 +221,7 @@ class courseController extends controller {
 
             if (!this.checkHash(req, episode)) this.error('اعتبار لینک شما به پایان رسیده است', 403);
 
-            let filePath = path.resolve(`./public/download/ASGLKET!1241tgsdq415215/${episode.videoUrl}`);
+            let filePath = path.resolve(`./public/download/ASGLKET.1241tgsdq415215/${episode.videoUrl}`);
 
             if (!fs.existsSync(filePath)) this.error('چنین فایل برای دانلود وجود دارد', 404);
 
