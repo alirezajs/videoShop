@@ -10,7 +10,13 @@ class courseController extends controller {
 
     async courses(req, res, next) {
         try {
-            let { search, type, category, page, pagesize } = req.query;
+            let {
+                search,
+                type,
+                category,
+                page,
+                pagesize
+            } = req.query;
             let query = {};
 
             if (search)
@@ -20,15 +26,32 @@ class courseController extends controller {
                 query.type = type;
 
             if (category && category != 'all') {
-                category = await Category.findOne({ slug: category });
+                category = await Category.findOne({
+                    slug: category
+                });
                 if (category)
-                    query.categories = { $in: [category.id] }
+                    query.categories = {
+                        $in: [category.id]
+                    }
             }
 
 
             let pageNumber = page || 1;
             let perPage = Number(pagesize) || 12;
-            let courses = await Course.paginate({ ...query }, { pageNumber, sort: { createdAt: 1 }, limit: perPage, populate: [{ path: 'categories' }, { path: 'user' }] });
+            let courses = await Course.paginate({
+                ...query
+            }, {
+                pageNumber,
+                sort: {
+                    createdAt: 1
+                },
+                limit: perPage,
+                populate: [{
+                    path: 'categories'
+                }, {
+                    path: 'user'
+                }]
+            });
 
             res.json({
                 data: this.filterCoursesData(courses),
@@ -74,15 +97,22 @@ class courseController extends controller {
 
     async singleCourse(req, res) {
         try {
-            let course = await Course.findByIdAndUpdate(req.params.course, { $inc: { viewCount: 1 } })
-                .populate([
-                    {
+            let course = await Course.findByIdAndUpdate(req.params.course, {
+                    $inc: {
+                        viewCount: 1
+                    }
+                })
+                .populate([{
                         path: 'user',
                         select: 'name'
                     },
                     {
                         path: 'episodes',
-                        options: { sort: { number: 1 } }
+                        options: {
+                            sort: {
+                                number: 1
+                            }
+                        }
                     },
                     {
                         path: 'categories',
@@ -92,11 +122,33 @@ class courseController extends controller {
                         path: 'teachers',
                         select: 'fullName expertise'
                     },
+                    {
+                        path: 'comments',
+                        match: {
+                            parent: null,
+                            approved: true
+                        },
+                        populate: [
+                            {
+                                path: 'user',
+                                select: 'name'
+                            },
+                            {
+                                path: 'comments',
+                                match: {
+                                    approved: true
+                                },
+                                populate: { path: 'user', select: 'name' }
+                            }
+                        ]
+                    }
                 ]);
 
             if (!course) return this.failed('چنین دوره ای یافت نشد', res, 404);
 
-            passport.authenticate('jwt', { session: false }, (err, user, info) => {
+            passport.authenticate('jwt', {
+                session: false
+            }, (err, user, info) => {
 
                 res.json({
                     data: this.filterCourseData(course, user),
@@ -113,20 +165,37 @@ class courseController extends controller {
 
     filterCourseData(course, user) {
         return {
-            id: course.id,
-            title: course.title,
-            slug: course.slug,
-            body: course.body,
-            image: course.thumb,
-            categories: course.categories.map(cate => {
-                return {
-                    name: cate.name,
-                    slug: cate.slug
-                }
-            }),
-            user: {
-                id: course.user.id,
-                name: course.user.name
+            about_course: {
+                course: {
+
+                    id: course.id,
+                    title: course.title,
+                    slug: course.slug,
+                    body: course.body,
+                    image: course.thumb,
+                    price: course.price,
+                    createdAt: course.createdAt,
+                    type: course.type,
+                    viewCount: course.viewCount,
+                    commentCount: course.commentCount,
+                    time: course.time
+                },
+                categories: course.categories.map(cate => {
+                    return {
+                        name: cate.name,
+                        slug: cate.slug
+                    }
+                }),
+                teachers: course.teachers.map(teacher => {
+                    return {
+                        fullName: teacher.fullName,
+                        expertise: teacher.expertise
+                    }
+                }),
+                user: {
+                    id: course.user.id,
+                    name: course.user.name
+                },
             },
             episodes: course.episodes.map(episode => {
                 return {
@@ -143,27 +212,19 @@ class courseController extends controller {
                     download: episode.download(!!user, user)
                 }
             }),
-            teachers: course.teachers.map(teacher => {
-                return {
-                    fullName: teacher.fullName,
-                    expertise: teacher.expertise
-                }
-            }),
-            price: course.price,
-            createdAt: course.createdAt,
-            type: course.type,
-            viewCount: course.viewCount,
-            commentCount: course.commentCount,
-            time: course.time
+            comments:course.comments
 
         }
     }
 
     async commentForSingleCourse(req, res) {
         try {
-            let comments = await Comment.find({ course: req.params.course, parent: null, approved: true })
-                .populate([
-                    {
+            let comments = await Comment.find({
+                    course: req.params.course,
+                    parent: null,
+                    approved: true
+                })
+                .populate([{
                         path: 'user',
                         select: 'name'
                     },
@@ -172,7 +233,10 @@ class courseController extends controller {
                         match: {
                             approved: true
                         },
-                        populate: { path: 'user', select: 'name' }
+                        populate: {
+                            path: 'user',
+                            select: 'name'
+                        }
                     }
                 ])
             return res.json(comments);
