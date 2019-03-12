@@ -27,6 +27,7 @@ class episodeController extends controller {
 
     }
     async create(req, res) {
+        
         let courses = await Course.find({});
         res.render('admin/episodes/create', { courses });
     }

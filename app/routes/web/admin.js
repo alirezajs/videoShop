@@ -128,13 +128,12 @@ router.delete('/users/roles/:id', roleController.destroy);
 
 // Episode Routes
 router.get('/episodes', episodeController.index);
-router.get('/episodes/:course', episodeController.episodCourse);
-
 router.get('/episodes/create', episodeController.create);
 router.post('/episodes/create', episodeValidator.handle(), episodeController.store);
 router.get('/episodes/:id/edit', episodeController.edit);
 router.put('/episodes/:id', episodeValidator.handle(), episodeController.update);
 router.delete('/episodes/:id', episodeController.destroy);
+router.get('/episodes/:course', episodeController.episodCourse);
 
 // Category Routes
 router.get('/categories', categoryController.index);
