@@ -50,10 +50,7 @@ episodeSchema.methods.download = function(check , user) {
 
     let salt = bcrypt.genSaltSync(15);
     let hash = bcrypt.hashSync(text , salt); 
-        return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : '#';
-
-
-    // return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : '#';
+    return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : '#';
 }
 
 episodeSchema.methods.path = function() {
