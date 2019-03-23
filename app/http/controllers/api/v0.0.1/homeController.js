@@ -4,6 +4,7 @@ const Episode = require('app/models/episode');
 const Payment = require('app/models/payment');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const Comment = require('app/models/comment');
 
 class homeController extends controller {
 
@@ -15,9 +16,7 @@ class homeController extends controller {
                 status: "success"
 
             })
-        }
-
-        catch (error) {
+        } catch (error) {
             this.failed(error, res)
         }
     }
@@ -25,7 +24,7 @@ class homeController extends controller {
     async history(req, res, next) {
         try {
             let page = req.query.page || 1;
-            let payments = await Payment.paginate({ user : req.user.id } , { page , sort : { createdAt : -1} , limit : 20 , populate : [ { path : 'course'} , { path : 'user' , select : 'name email'}]});
+            let payments = await Payment.paginate({ user: req.user.id }, { page, sort: { createdAt: -1 }, limit: 20, populate: [{ path: 'course' }, { path: 'user', select: 'name email' }] });
 
             res.json({
                 data: this.filterPaymentData(payments),
@@ -36,40 +35,68 @@ class homeController extends controller {
         }
     }
 
+    async comment(req, res, next) {
+        try {
+            // let status = await this.validationData(req);
+            // if (!status) return this.failed("اطلاعات وارد شده صحیح نمی باشد", res);
+
+
+
+            let newComment = new Comment({
+                user: req.user.id,
+                ...req.body
+            })
+
+
+            await newComment.save();
+
+            res.json({
+                status: 'success'
+            })
+
+
+
+        } catch (err) {
+            this.failed(err.message, res);
+
+        }
+
+    }
+
     filterPaymentData(payments) {
         return {
             ...payments,
-            docs : payments.docs.map(pay => {
+            docs: payments.docs.map(pay => {
                 return {
-                    payment : pay.payment,
-                    resnumber : pay.resnumber,
-                    price : pay.price,
+                    payment: pay.payment,
+                    resnumber: pay.resnumber,
+                    price: pay.price,
                     user: {
-                        name : pay.user.name,
-                        email : pay.user.email
+                        name: pay.user.name,
+                        email: pay.user.email
                     }
                 }
             })
         }
     }
 
-     filterUserData(user) {
+    filterUserData(user) {
         return {
-            id : user.id,
-            admin : user.admin,
-            name : user.name,
-            email : user.email,
-            createdAt : user.createdAt,
-            vipTime : user.vipTime,
-            vipType : user.vipType,
-            roles : user.roles.map(role => {
+            id: user.id,
+            admin: user.admin,
+            name: user.name,
+            email: user.email,
+            createdAt: user.createdAt,
+            vipTime: user.vipTime,
+            vipType: user.vipType,
+            roles: user.roles.map(role => {
                 return {
-                    name : role.name ,
-                    label : role.label,
-                    permissions : role.permissions.map(per => {
+                    name: role.name,
+                    label: role.label,
+                    permissions: role.permissions.map(per => {
                         return {
-                            name : per.name ,
-                            label : per.label
+                            name: per.name,
+                            label: per.label
                         }
                     })
                 }

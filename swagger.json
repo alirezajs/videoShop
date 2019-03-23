@@ -5,10 +5,9 @@
         "version": "1.0.0",
         "title": "Video Shop Document"
     },
-    "host": "95.156.255.148:3001",
+    "host": "http://95.156.255.148:3001",
     "basePath": "/api/v1",
-    "tags": [
-        {
+    "tags": [{
             "name": "user",
             "description": "Operations about user",
             "externalDocs": {}
@@ -35,7 +34,7 @@
                     "application/json;charset=utf-8"
                 ],
                 "parameters": [
-                   
+
                 ],
                 "responses": {}
             }
@@ -51,8 +50,7 @@
                 "produces": [
                     "application/json;charset=utf-8"
                 ],
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "category",
                         "in": "query",
                         "description": "category",
@@ -102,8 +100,7 @@
                 "produces": [
                     "application/json;charset=utf-8"
                 ],
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "courseId",
                         "in": "path",
                         "description": "courseId to return what exactlly course do you want",
@@ -132,17 +129,15 @@
                 "consumes": [
                     "application/json; charset=utf-8"
                 ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "all parameter which you need for login",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Register"
-                        }
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "all parameter which you need for login",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Register"
                     }
-                ],
+                }],
                 "responses": {}
             }
         },
@@ -161,17 +156,15 @@
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "all parameter which you need for login",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Login"
-                        }
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "all parameter which you need for login",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Login"
                     }
-                ],
+                }],
                 "responses": {}
             }
         },
@@ -186,15 +179,13 @@
                 "consumes": [
                     "application/json; charset=utf-8"
                 ],
-                "parameters": [
-                    {
-                        "name": "api_token",
-                        "in": "query",
-                        "description": "api token",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
+                "parameters": [{
+                    "name": "api_token",
+                    "in": "query",
+                    "description": "api token",
+                    "required": false,
+                    "type": "string"
+                }],
                 "responses": {}
             }
         },
@@ -209,7 +200,36 @@
                 "consumes": [
                     "application/json; charset=utf-8"
                 ],
-                "parameters": [
+                "parameters": [{
+                    "name": "api_token",
+                    "in": "query",
+                    "description": "api token",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {}
+            }
+        },
+        "/comment": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "set user comment",
+                "description": "",
+                "operationId": "setComment",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "description": "all parameter which you need for login",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    },
                     {
                         "name": "api_token",
                         "in": "query",
@@ -259,6 +279,26 @@
                     "type": "string",
                     "example": "123456789"
                 }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "required": [
+                "parent",
+                "course",
+                "comment"
+            ],
+            "properties": {
+                "parent": {
+                    "type": "string"
+                },
+                "course": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                }
+
             }
         }
     }
