@@ -8,17 +8,26 @@ const jwt = require('jsonwebtoken');
 class authController extends controller {
 
     async login(req, res) {
-        if (! await this.validationData(req, res)) return;
+        if (!await this.validationData(req, res)) return;
 
-        passport.authenticate('local.login', { session: false }, (err, user) => {
+        passport.authenticate('local.login', {
+            session: false
+        }, (err, user) => {
             if (err) return this.failed(err.message, res);
-            if (!user) return this.failed('چنین کاربری وجود ندارد', res, 404)
+            if (!user) {
+                if (!await this.validationData(req, res)) return;
+                passport.authenticate('local.register')(req, res, next);
+            }
 
-            req.login(user, { session: false }, (err) => {
+            req.login(user, {
+                session: false
+            }, (err) => {
                 if (err) return this.failed(err.message, res);
 
                 //         // create token
-                const token = jwt.sign({ id: user.id }, config.jwt.secret_key, {
+                const token = jwt.sign({
+                    id: user.id
+                }, config.jwt.secret_key, {
                     expiresIn: 60 * 60 * 24
                 });
 
@@ -34,7 +43,7 @@ class authController extends controller {
         })(req, res);
     }
     async register(req, res, next) {
-        if (! await this.validationData(req, res)) return;
+        if (!await this.validationData(req, res)) return;
         passport.authenticate('local.register')(req, res, next);
 
         return res.json({
