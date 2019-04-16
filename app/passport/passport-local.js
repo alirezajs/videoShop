@@ -25,7 +25,7 @@ passport.use('local.register' , new localStrategy({
 
         
         const newUser = new User({
-            name : req.body.name,
+            name : req.body.name | "نامشخص",
             email,
             password
         });

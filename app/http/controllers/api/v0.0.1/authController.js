@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 class authController extends controller {
 
-    async login(req, res) {
+    async login(req, res,next) {
         if (!await this.validationData(req, res)) return;
 
         passport.authenticate('local.login', {
