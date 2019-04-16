@@ -15,7 +15,6 @@ class authController extends controller {
         }, (err, user) => {
             if (err) return this.failed(err.message, res);
             if (!user) {
-                if (!await this.validationData(req, res)) return;
                 passport.authenticate('local.register')(req, res, next);
             }
 
