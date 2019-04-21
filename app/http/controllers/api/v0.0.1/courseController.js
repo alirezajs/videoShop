@@ -15,7 +15,9 @@ class courseController extends controller {
                 type,
                 category,
                 page,
-                pagesize
+                pagesize,
+                orderBy,
+                orderType
             } = req.query;
             let query = {};
 
@@ -34,6 +36,11 @@ class courseController extends controller {
                         $in: [category.id]
                     }
             }
+            let orderQuery = {};
+            if (orderBy) {
+                orderQuery = await this.createFilter(orderBy, orderType);
+            }
+
 
 
             let pageNumber = page || 1;
@@ -41,17 +48,17 @@ class courseController extends controller {
             let courses = await Course.paginate({
                 ...query
             }, {
-                pageNumber,
-                sort: {
-                    createdAt: 1
-                },
-                limit: perPage,
-                populate: [{
-                    path: 'categories'
-                }, {
-                    path: 'user'
-                }]
-            });
+                    pageNumber,
+                    sort: {
+                        ...orderQuery
+                    },
+                    limit: perPage,
+                    populate: [{
+                        path: 'categories'
+                    }, {
+                        path: 'user'
+                    }]
+                });
 
             res.json({
                 data: this.filterCoursesData(courses),
@@ -94,54 +101,78 @@ class courseController extends controller {
             })
         }
     }
+    async createFilter(orderBy, orderType) {
+        let ordertypeExam = orderType == "asc" ? 1 : -1
+        switch (orderBy) {
+            case "createdAt":
+                return {
+                    createdAt: ordertypeExam
+                }
+            case "price":
+                return {
+                    price: ordertypeExam
+                }
+            case "title":
+                return {
+                    title: ordertypeExam
+                }
+            case "popular":
+                return {
+                    viewCount: ordertypeExam
+                }
+            default:
+                return {}
+        }
+
+    }
 
     async singleCourse(req, res) {
         try {
             let course = await Course.findByIdAndUpdate(req.params.course, {
-                    $inc: {
-                        viewCount: 1
-                    }
-                })
+                $inc: {
+                    viewCount: 1
+                }
+            })
                 .populate([{
-                        path: 'user',
-                        select: 'name'
-                    },
-                    {
-                        path: 'episodes',
-                        options: {
-                            sort: {
-                                number: 1
-                            }
+                    path: 'user',
+                    select: 'name'
+                },
+                {
+                    path: 'episodes',
+                    options: {
+                        sort: {
+                            number: 1
                         }
-                    },
-                    {
-                        path: 'categories',
-                        select: 'name slug'
-                    },
-                    {
-                        path: 'teachers',
-                        select: 'fullName expertise'
-                    },
-                    {
-                        path: 'comments',
-                        match: {
-                            parent: null,
-                            approved: true
-                        },
-                        populate: [
-                            {
-                                path: 'user',
-                                select: 'name'
-                            },
-                            {
-                                path: 'comments',
-                                match: {
-                                    approved: true
-                                },
-                                populate: { path: 'user', select: 'name' }
-                            }
-                        ]
                     }
+                },
+                {
+                    path: 'categories',
+                    select: 'name slug'
+                },
+                {
+                    path: 'teachers',
+                    select: 'fullName expertise'
+                },
+                {
+                    path: 'comments',
+                    match: {
+                        parent: null,
+                        approved: true
+                    },
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'name'
+                        },
+                        {
+                            path: 'comments',
+                            match: {
+                                approved: true
+                            },
+                            populate: { path: 'user', select: 'name' }
+                        }
+                    ]
+                }
                 ]);
 
             if (!course) return this.failed('چنین دوره ای یافت نشد', res, 404);
@@ -212,7 +243,7 @@ class courseController extends controller {
                     download: episode.download(!!user, user)
                 }
             }),
-            comments:course.comments
+            comments: course.comments
 
         }
     }
@@ -220,24 +251,24 @@ class courseController extends controller {
     async commentForSingleCourse(req, res) {
         try {
             let comments = await Comment.find({
-                    course: req.params.course,
-                    parent: null,
-                    approved: true
-                })
+                course: req.params.course,
+                parent: null,
+                approved: true
+            })
                 .populate([{
+                    path: 'user',
+                    select: 'name'
+                },
+                {
+                    path: 'comments',
+                    match: {
+                        approved: true
+                    },
+                    populate: {
                         path: 'user',
                         select: 'name'
-                    },
-                    {
-                        path: 'comments',
-                        match: {
-                            approved: true
-                        },
-                        populate: {
-                            path: 'user',
-                            select: 'name'
-                        }
                     }
+                }
                 ])
             return res.json(comments);
         } catch (err) {
