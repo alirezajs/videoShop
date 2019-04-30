@@ -14,9 +14,7 @@ const gate = require('app/helpers/gate');
 const i18n = require("i18n");
 const rememberLogin = require('app/http/middleware/rememberLogin');
 const compression = require('compression')
-// const swagger = require("swagger-node-express");
-var swaggerUi = require('swagger-ui-express'),
-    swaggerDocument = require('../swagger.json');
+
 
 module.exports = class Application {
     constructor() {
@@ -81,9 +79,7 @@ module.exports = class Application {
 
         app.use(compression())
 
-        // Couple the application to the Swagger module.
-        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-        // app.use('/api/v1', router);
+
 
     }
 

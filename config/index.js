@@ -14,6 +14,7 @@ module.exports = {
     project,
     debug: false,
     siteurl : process.env.WEBSITE_URL,
+    siteurlpure:process.env.WEBSITE_URL_PURE,
     jwt : {
         secret_key : 'fgsdget#r%!@#$qeg'
     }

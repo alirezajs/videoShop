@@ -5,7 +5,6 @@
         "version": "1.0.0",
         "title": "Video Shop Document"
     },
-    "host": "http://95.156.255.148:81",
 
     "basePath": "/api/v1",
     "tags": [
